@@ -399,7 +399,6 @@ body {
 
 .notification-banner.show { display: block; }
 
-/* ===== الحصالة ===== */
 .goal-card {
   background: var(--bg-secondary);
   border-radius: 15px;
@@ -459,7 +458,6 @@ body {
   background: linear-gradient(90deg, var(--purple), var(--gold));
   border-radius: 7px;
   transition: width 0.6s ease;
-  position: relative;
 }
 
 .progress-text {
@@ -507,7 +505,6 @@ body {
   font-size: 0.85rem;
 }
 
-/* ===== التنبيهات ===== */
 .reminder-card {
   background: var(--bg-secondary);
   border-radius: 15px;
@@ -544,6 +541,7 @@ body {
 .reminder-actions {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 
 .reminder-toggle {
@@ -641,13 +639,11 @@ body {
 
 <div class="main-content">
 
-  <!-- ===== الأذان ===== -->
+  <!-- الأذان -->
   <div class="section active" id="prayer">
     <div class="card">
       <h2 class="card-title">🕐 مواقيت الصلاة</h2>
-      <div class="notification-banner" id="prayerNotification">
-        🔔 حان الآن وقت الصلاة
-      </div>
+      <div class="notification-banner" id="prayerNotification"></div>
       <div class="location-info" id="locationInfo">
         <span>📍 جاري تحديد موقعك...</span>
         <div style="display: flex; gap: 8px;">
@@ -662,20 +658,20 @@ body {
     </div>
   </div>
 
-  <!-- ===== المصاريف ===== -->
+  <!-- المصاريف -->
   <div class="section" id="finance">
     <div class="summary-grid">
       <div class="summary-card income">
         <div class="summary-label">إجمالي الدخل</div>
-        <div class="summary-value" id="totalIncome">0 ر.س</div>
+        <div class="summary-value" id="totalIncome">0 دج</div>
       </div>
       <div class="summary-card expense">
         <div class="summary-label">إجمالي المصروف</div>
-        <div class="summary-value" id="totalExpense">0 ر.س</div>
+        <div class="summary-value" id="totalExpense">0 دج</div>
       </div>
       <div class="summary-card balance">
         <div class="summary-label">الرصيد المتبقي</div>
-        <div class="summary-value" id="balance">0 ر.س</div>
+        <div class="summary-value" id="balance">0 دج</div>
       </div>
     </div>
 
@@ -691,7 +687,7 @@ body {
             </select>
           </div>
           <div class="form-group">
-            <label>المبلغ (ر.س)</label>
+            <label>المبلغ (دج)</label>
             <input type="number" class="form-control" id="transAmount" step="0.01" required>
           </div>
         </div>
@@ -729,7 +725,7 @@ body {
     </div>
   </div>
 
-  <!-- ===== الديون ===== -->
+  <!-- الديون -->
   <div class="section" id="debts">
     <div class="card">
       <h2 class="card-title">➕ تسجيل دين جديد</h2>
@@ -740,7 +736,7 @@ body {
             <input type="text" class="form-control" id="debtPerson" required>
           </div>
           <div class="form-group">
-            <label>المبلغ (ر.س)</label>
+            <label>المبلغ (دج)</label>
             <input type="number" class="form-control" id="debtAmount" step="0.01" required>
           </div>
         </div>
@@ -764,18 +760,18 @@ body {
     </div>
   </div>
 
-  <!-- ===== المدخرات ===== -->
+  <!-- المدخرات -->
   <div class="section" id="savings">
     <div class="savings-display">
       <div style="font-size: 1.1rem; opacity: 0.9;">إجمالي مدخراتك</div>
-      <div class="savings-amount" id="totalSavings">0 ر.س</div>
+      <div class="savings-amount" id="totalSavings">0 دج</div>
     </div>
 
     <div class="card">
       <h2 class="card-title">💰 إضافة مبلغ للمدخرات</h2>
       <form id="savingsForm">
         <div class="form-group">
-          <label>المبلغ (ر.س)</label>
+          <label>المبلغ (دج)</label>
           <input type="number" class="form-control" id="savingAmount" step="0.01" required>
         </div>
         <div class="form-group">
@@ -792,7 +788,7 @@ body {
     </div>
   </div>
 
-  <!-- ===== الحصالة ===== -->
+  <!-- الحصالة -->
   <div class="section" id="goals">
     <div class="card">
       <h2 class="card-title">🎯 إنشاء هدف ادخار جديد</h2>
@@ -803,7 +799,7 @@ body {
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>المبلغ المطلوب (ر.س)</label>
+            <label>المبلغ المطلوب (دج)</label>
             <input type="number" class="form-control" id="goalTarget" step="0.01" required>
           </div>
           <div class="form-group">
@@ -825,7 +821,7 @@ body {
     </div>
   </div>
 
-  <!-- ===== التنبيهات ===== -->
+  <!-- التنبيهات -->
   <div class="section" id="reminders">
     <div class="card">
       <h2 class="card-title">⏰ إضافة تنبيه جديد</h2>
@@ -915,7 +911,6 @@ function playNotificationSound(type) {
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     
     if (type === 'prayer') {
-      // صوت الصلاة: نغمة هادئة
       const notes = [880, 1100, 880];
       notes.forEach((freq, i) => {
         setTimeout(() => {
@@ -932,7 +927,6 @@ function playNotificationSound(type) {
         }, i * 300);
       });
     } else {
-      // صوت التنبيه: نغمة عادية
       const osc = audioContext.createOscillator();
       const gain = audioContext.createGain();
       osc.connect(gain);
@@ -982,7 +976,6 @@ function showNotification(title, body, type) {
   }
 }
 
-// زر التجربة
 function testNotification() {
   requestNotificationPermission();
   setTimeout(() => {
@@ -1117,9 +1110,9 @@ function renderTransactions() {
     }
   });
   
-  document.getElementById('totalIncome').textContent = totalIncome.toFixed(2) + ' ر.س';
-  document.getElementById('totalExpense').textContent = totalExpense.toFixed(2) + ' ر.س';
-  document.getElementById('balance').textContent = (totalIncome - totalExpense).toFixed(2) + ' ر.س';
+  document.getElementById('totalIncome').textContent = totalIncome.toFixed(2) + ' دج';
+  document.getElementById('totalExpense').textContent = totalExpense.toFixed(2) + ' دج';
+  document.getElementById('balance').textContent = (totalIncome - totalExpense).toFixed(2) + ' دج';
   
   const breakdown = document.getElementById('categoryBreakdown');
   if (Object.keys(categoryTotals).length === 0) {
@@ -1130,7 +1123,7 @@ function renderTransactions() {
       <div class="breakdown-item">
         <span style="min-width: 80px; font-weight: 600;">${cat}</span>
         <div class="breakdown-bar"><div class="breakdown-fill" style="width: ${(val/maxVal)*100}%"></div></div>
-        <span style="min-width: 100px; text-align: left; color: var(--danger); font-weight: 700;">${val.toFixed(2)} ر.س</span>
+        <span style="min-width: 100px; text-align: left; color: var(--danger); font-weight: 700;">${val.toFixed(2)} دج</span>
       </div>
     `).join('');
   }
@@ -1149,7 +1142,7 @@ function renderTransactions() {
           <div class="meta">📅 ${t.date} <span class="category-tag">${t.type === 'income' ? 'دخل' : 'مصروف'}</span></div>
         </div>
       </div>
-      <div class="transaction-amount">${t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)} ر.س</div>
+      <div class="transaction-amount">${t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)} دج</div>
     </div>
   `).join('');
 }
@@ -1199,12 +1192,12 @@ function renderDebts() {
     <div class="debt-card">
       <div class="debt-header">
         <div class="debt-person">👤 ${d.person}</div>
-        <div class="debt-amount">${d.total.toFixed(2)} ر.س</div>
+        <div class="debt-amount">${d.total.toFixed(2)} دج</div>
       </div>
       ${d.entries.map(e => `
         <div class="debt-entry">
           <div>
-            <div style="font-weight: 600;">${e.amount.toFixed(2)} ر.س</div>
+            <div style="font-weight: 600;">${e.amount.toFixed(2)} دج</div>
             <div style="color: var(--text-secondary); font-size: 0.85rem;">${e.date}${e.note ? ' • ' + e.note : ''}</div>
           </div>
           <button class="delete-btn" onclick="deleteDebtEntry('${d.person}', ${e.id})">🗑️</button>
@@ -1240,7 +1233,7 @@ function deleteSaving(id) {
 
 function renderSavings() {
   const total = savings.reduce((sum, s) => sum + s.amount, 0);
-  document.getElementById('totalSavings').textContent = total.toFixed(2) + ' ر.س';
+  document.getElementById('totalSavings').textContent = total.toFixed(2) + ' دج';
   const list = document.getElementById('savingsList');
   if (savings.length === 0) {
     list.innerHTML = '<div class="empty-state">لا توجد مدخرات</div>';
@@ -1255,12 +1248,12 @@ function renderSavings() {
           <div class="meta">📅 ${s.date}</div>
         </div>
       </div>
-      <div class="transaction-amount" style="color: var(--success);">+${s.amount.toFixed(2)} ر.س</div>
+      <div class="transaction-amount" style="color: var(--success);">+${s.amount.toFixed(2)} دج</div>
     </div>
   `).join('');
 }
 
-// ============ Goals (الحصالة) ============
+// ============ Goals ============
 let goals = JSON.parse(localStorage.getItem('goals') || '[]');
 
 document.getElementById('goalForm').addEventListener('submit', (e) => {
@@ -1276,10 +1269,7 @@ document.getElementById('goalForm').addEventListener('submit', (e) => {
   
   goals.push({
     id: Date.now(),
-    name,
-    target,
-    days,
-    note,
+    name, target, days, note,
     startDate: startDate.toISOString().split('T')[0],
     endDate: endDate.toISOString().split('T')[0],
     deposits: []
@@ -1345,7 +1335,6 @@ function renderGoals() {
     const percent = Math.min((current / g.target) * 100, 100);
     const remaining = Math.max(g.target - current, 0);
     
-    // حساب الأيام المتبقية
     const today = new Date();
     const end = new Date(g.endDate);
     const daysLeft = Math.max(Math.ceil((end - today) / (1000 * 60 * 60 * 24)), 0);
@@ -1362,9 +1351,9 @@ function renderGoals() {
         ${g.note ? `<div style="color: var(--text-secondary); margin-bottom: 10px; font-size: 0.9rem;">${g.note}</div>` : ''}
         <div class="goal-completed ${completed ? 'show' : ''}">🎉 تم تحقيق الهدف! مبروك</div>
         <div class="goal-stats">
-          <div class="goal-stat">الهدف: <strong>${g.target.toFixed(2)} ر.س</strong></div>
-          <div class="goal-stat">المدخر: <strong style="color: var(--purple);">${current.toFixed(2)} ر.س</strong></div>
-          <div class="goal-stat">المتبقي: <strong style="color: var(--danger);">${remaining.toFixed(2)} ر.س</strong></div>
+          <div class="goal-stat">الهدف: <strong>${g.target.toFixed(2)} دج</strong></div>
+          <div class="goal-stat">المدخر: <strong style="color: var(--purple);">${current.toFixed(2)} دج</strong></div>
+          <div class="goal-stat">المتبقي: <strong style="color: var(--danger);">${remaining.toFixed(2)} دج</strong></div>
         </div>
         <div class="progress-container">
           <div class="progress-bar-bg">
@@ -1377,7 +1366,7 @@ function renderGoals() {
         </div>
         ${!completed ? `
           <div class="goal-stat" style="margin-bottom: 10px;">
-            💡 تحتاج ادخار <strong style="color: var(--accent);">${dailyNeed.toFixed(2)} ر.س</strong> يومياً
+            💡 تحتاج ادخار <strong style="color: var(--accent);">${dailyNeed.toFixed(2)} دج</strong> يومياً
           </div>
           <div class="deposit-input-row">
             <input type="number" class="form-control" id="deposit-${g.id}" step="0.01" placeholder="أدخل المبلغ">
@@ -1389,7 +1378,7 @@ function renderGoals() {
             <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.9rem;">📝 سجل الإيداعات:</div>
             ${g.deposits.slice(0, 5).map(d => `
               <div class="deposit-item">
-                <span>💰 ${d.amount.toFixed(2)} ر.س • ${d.date}</span>
+                <span>💰 ${d.amount.toFixed(2)} دج • ${d.date}</span>
                 <button class="delete-btn" style="font-size: 0.8rem;" onclick="deleteGoalDeposit(${g.id}, ${d.id})">🗑️</button>
               </div>
             `).join('')}
@@ -1401,7 +1390,7 @@ function renderGoals() {
   }).join('');
 }
 
-// ============ Reminders (التنبيهات) ============
+// ============ Reminders ============
 let reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
 let lastReminderTriggered = {};
 
@@ -1450,7 +1439,6 @@ function checkReminders() {
       const body = r.reason ? `${r.reason}` : `لا تنسى: ${r.title}`;
       showNotification(`⏰ تذكير: ${r.title}`, body, 'reminder');
       
-      // بانر داخل التطبيق
       const banner = document.getElementById('prayerNotification');
       banner.textContent = `⏰ تذكير: ${r.title} - ${r.reason || 'لا تنسى!'}`;
       banner.classList.add('show');
@@ -1493,9 +1481,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   requestNotificationPermission();
   
-  // فحص الصلاة كل 15 ثانية
   setInterval(checkPrayerTime, 15000);
-  // فحص التنبيهات كل 10 ثواني
   setInterval(checkReminders, 10000);
   
   console.log('✅ التطبيق يعمل بكامل طاقته');
