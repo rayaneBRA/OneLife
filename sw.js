@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hayati-v2';
+const CACHE_NAME = 'hayati-v4';
 const urlsToCache = [
   '/OneLife/',
   '/OneLife/index.html',
@@ -35,4 +35,21 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request)
       .then((response) => response || fetch(event.request))
   );
+});
+
+// استقبال رسالة من الصفحة لإرسال إشعار
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'PRAYER_NOTIFICATION') {
+    const { prayerName, prayerTime } = event.data;
+    
+    self.registration.showNotification('🕌 وقت الصلاة', {
+      body: `حان الآن وقت صلاة ${prayerName} (${prayerTime})`,
+      icon: '/OneLife/icon.png',
+      badge: '/OneLife/icon.png',
+      vibrate: [150, 80, 150],
+      tag: 'prayer-' + prayerName,
+      requireInteraction: false,
+      silent: false
+    });
+  }
 });
