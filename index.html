@@ -1,1372 +1,745 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حياتي - تطبيقك الشخصي</title>
-
-<link rel="icon" type="image/png" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#084d38">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="حياتي">
-
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg-primary: #f5f1e8;
-  --bg-secondary: #ffffff;
-  --bg-card: #fffdf7;
-  --text-primary: #2c1810;
-  --text-secondary: #5a4632;
-  --accent: #0d6b4e;
-  --accent-light: #1a8f6a;
-  --accent-dark: #084d38;
-  --gold: #c9a961;
-  --gold-light: #e0c987;
-  --border: #d4c5a0;
-  --shadow: rgba(44, 24, 16, 0.1);
-  --danger: #a63a3a;
-  --success: #2d7a4f;
-  --purple: #6b4e9e;
-}
-
-[data-theme="dark"] {
-  --bg-primary: #0f1419;
-  --bg-secondary: #1a2332;
-  --bg-card: #1e2a3a;
-  --text-primary: #e8dcc4;
-  --text-secondary: #b8a88a;
-  --accent: #2d9d78;
-  --accent-light: #3fb892;
-  --accent-dark: #1f7a5c;
-  --gold: #d4b876;
-  --gold-light: #e8d09a;
-  --border: #2d3a4d;
-  --shadow: rgba(0, 0, 0, 0.4);
-  --danger: #d65454;
-  --success: #3fa870;
-  --purple: #9b7fd4;
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: 'Cairo', sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  min-height: 100vh;
-  transition: all 0.4s ease;
-}
-
-.header {
-  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
-  color: var(--gold-light);
-  padding: 25px 20px 60px;
-  text-align: center;
-  position: relative;
-  box-shadow: 0 4px 20px var(--shadow);
-}
-
-.header-content { position: relative; z-index: 2; }
-
-.header h1 { font-family: 'Reem Kufi', serif; font-size: 2.5rem; margin-bottom: 5px; }
-.header .subtitle { font-family: 'Amiri', serif; font-size: 1.1rem; opacity: 0.9; }
-
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid var(--gold);
-  color: var(--gold-light);
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.3rem;
-  z-index: 3;
-}
-
-.nav-container {
-  max-width: 1200px;
-  margin: -40px auto 0;
-  padding: 0 15px;
-  position: relative;
-  z-index: 10;
-}
-
-.nav-tabs {
-  display: flex;
-  background: var(--bg-secondary);
-  border-radius: 15px;
-  padding: 8px;
-  box-shadow: 0 8px 25px var(--shadow);
-  gap: 5px;
-  overflow-x: auto;
-}
-
-.nav-tab {
-  flex: 1;
-  min-width: 110px;
-  padding: 12px 10px;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  font-family: 'Cairo', sans-serif;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  white-space: nowrap;
-}
-
-.nav-tab.active {
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-  color: white;
-}
-
-.main-content {
-  max-width: 1200px;
-  margin: 25px auto;
-  padding: 0 15px 40px;
-}
-
-.section { display: none; }
-.section.active { display: block; }
-
-.card {
-  background: var(--bg-card);
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 15px var(--shadow);
-  border: 1px solid var(--border);
-}
-
-.card-title {
-  font-family: 'Reem Kufi', serif;
-  font-size: 1.5rem;
-  color: var(--accent);
-  margin-bottom: 20px;
-  border-bottom: 2px solid var(--border);
-  padding-bottom: 12px;
-}
-
-.prayer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 15px;
-}
-
-.prayer-card {
-  background: var(--bg-secondary);
-  padding: 20px 15px;
-  border-radius: 12px;
-  text-align: center;
-  border: 1px solid var(--border);
-}
-
-.prayer-card.next {
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-  color: white;
-}
-
-.prayer-name { font-family: 'Reem Kufi', serif; font-size: 1.2rem; color: var(--accent); }
-.prayer-card.next .prayer-name { color: white; }
-.prayer-time { font-size: 1.1rem; font-weight: 700; }
-.prayer-icon { font-size: 2rem; margin-bottom: 8px; }
-
-.form-group { margin-bottom: 15px; }
-.form-group label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-weight: 600; }
-
-.form-control {
-  width: 100%;
-  padding: 12px 15px;
-  background: var(--bg-secondary);
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  color: var(--text-primary);
-  font-family: 'Cairo', sans-serif;
-}
-
-.form-control:focus {
-  outline: none;
-  border-color: var(--accent);
-}
-
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-
-.btn {
-  padding: 12px 25px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-family: 'Cairo', sans-serif;
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-}
-
-.btn-gold {
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  color: var(--accent-dark);
-}
-
-.btn-purple {
-  background: linear-gradient(135deg, var(--purple), #8a6bc4);
-  color: white;
-}
-
-.btn-small {
-  width: auto;
-  padding: 8px 15px;
-  font-size: 0.85rem;
-}
-
-.btn-install {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-  max-width: 300px;
-  margin: 0 auto;
-  padding: 15px 25px;
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  color: var(--accent-dark);
-  border: none;
-  border-radius: 15px;
-  font-family: 'Cairo', sans-serif;
-  font-weight: 700;
-  font-size: 1.1rem;
-  cursor: pointer;
-  box-shadow: 0 8px 25px rgba(201, 169, 97, 0.4);
-  z-index: 1000;
-  display: none;
-}
-
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
-  margin-bottom: 25px;
-}
-
-.summary-card {
-  background: var(--bg-secondary);
-  padding: 20px;
-  border-radius: 12px;
-  border-right: 4px solid var(--accent);
-}
-
-.summary-card.income { border-color: var(--success); }
-.summary-card.expense { border-color: var(--danger); }
-.summary-card.balance { border-color: var(--gold); }
-
-.summary-label { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 8px; }
-.summary-value { font-size: 1.8rem; font-weight: 700; font-family: 'Reem Kufi', serif; }
-.summary-card.income .summary-value { color: var(--success); }
-.summary-card.expense .summary-value { color: var(--danger); }
-.summary-card.balance .summary-value { color: var(--gold); }
-
-.transaction-item {
-  background: var(--bg-secondary);
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-right: 4px solid var(--border);
-}
-
-.transaction-item.income { border-color: var(--success); }
-.transaction-item.expense { border-color: var(--danger); }
-
-.transaction-info h4 { font-size: 1.05rem; margin-bottom: 4px; }
-.transaction-info .meta { font-size: 0.85rem; color: var(--text-secondary); }
-.transaction-amount { font-weight: 700; font-size: 1.1rem; }
-.transaction-item.income .transaction-amount { color: var(--success); }
-.transaction-item.expense .transaction-amount { color: var(--danger); }
-
-.delete-btn {
-  background: transparent;
-  border: none;
-  color: var(--danger);
-  cursor: pointer;
-  padding: 5px;
-  font-size: 1rem;
-}
-
-.savings-display {
-  text-align: center;
-  padding: 30px;
-  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
-  color: white;
-  border-radius: 15px;
-  margin-bottom: 20px;
-}
-
-.savings-amount { font-size: 3rem; font-weight: 700; font-family: 'Reem Kufi', serif; }
-
-.empty-state { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
-
-.loading { text-align: center; padding: 30px; }
-
-.spinner {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  border: 4px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.islamic-quote {
-  font-family: 'Amiri', serif;
-  text-align: center;
-  padding: 15px;
-  color: var(--gold);
-  font-size: 1.1rem;
-  margin-top: 15px;
-  border-top: 1px solid var(--border);
-}
-
-.location-info {
-  background: var(--bg-secondary);
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-right: 4px solid var(--gold);
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.notification-banner {
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  color: var(--accent-dark);
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  text-align: center;
-  font-weight: 700;
-  display: none;
-  box-shadow: 0 4px 15px rgba(201, 169, 97, 0.4);
-}
-
-.notification-banner.show { display: block; }
-
-.goal-card {
-  background: var(--bg-secondary);
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 15px;
-  border-right: 5px solid var(--purple);
-  box-shadow: 0 2px 8px var(--shadow);
-}
-
-.goal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.goal-name {
-  font-family: 'Reem Kufi', serif;
-  font-size: 1.4rem;
-  color: var(--purple);
-}
-
-.goal-stats {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-  font-size: 0.9rem;
-}
-
-.goal-stat {
-  background: var(--bg-card);
-  padding: 8px 14px;
-  border-radius: 8px;
-  color: var(--text-secondary);
-}
-
-.goal-stat strong { color: var(--text-primary); }
-
-.progress-container {
-  margin-bottom: 15px;
-}
-
-.progress-bar-bg {
-  width: 100%;
-  height: 14px;
-  background: var(--bg-card);
-  border-radius: 7px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--purple), var(--gold));
-  border-radius: 7px;
-  transition: width 0.6s ease;
-}
-
-.progress-text {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  margin-top: 6px;
-  color: var(--text-secondary);
-}
-
-.goal-completed {
-  background: linear-gradient(135deg, var(--success), #3fa870);
-  color: white;
-  padding: 12px;
-  border-radius: 10px;
-  text-align: center;
-  font-weight: 700;
-  margin-bottom: 15px;
-  display: none;
-}
-
-.goal-completed.show { display: block; }
-
-.deposit-input-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.deposit-input-row .form-control { flex: 1; }
-
-.deposit-history {
-  margin-top: 12px;
-  max-height: 150px;
-  overflow-y: auto;
-}
-
-.deposit-item {
-  background: var(--bg-card);
-  padding: 8px 12px;
-  border-radius: 6px;
-  margin-bottom: 5px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.85rem;
-}
-
-.reminder-card {
-  background: var(--bg-secondary);
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 15px;
-  border-right: 5px solid var(--danger);
-  box-shadow: 0 2px 8px var(--shadow);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-}
-
-.reminder-info { flex: 1; }
-
-.reminder-time {
-  font-family: 'Reem Kufi', serif;
-  font-size: 1.8rem;
-  color: var(--danger);
-  margin-bottom: 5px;
-}
-
-.reminder-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.reminder-reason {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
-
-.reminder-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.reminder-toggle {
-  width: 50px;
-  height: 26px;
-  background: var(--border);
-  border-radius: 13px;
-  border: none;
-  position: relative;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.reminder-toggle::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: white;
-  border-radius: 50%;
-  top: 3px;
-  right: 3px;
-  transition: all 0.3s;
-}
-
-.reminder-toggle.on {
-  background: var(--success);
-}
-
-.reminder-toggle.on::after {
-  right: 27px;
-}
-
-@media (max-width: 768px) {
-  .header h1 { font-size: 1.8rem; }
-  .form-row { grid-template-columns: 1fr; }
-  .summary-value { font-size: 1.4rem; }
-  .savings-amount { font-size: 2.2rem; }
-  .nav-tab { font-size: 0.8rem; min-width: 95px; }
-}
-
-.breakdown-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.breakdown-bar {
-  flex: 1;
-  height: 8px;
-  background: var(--bg-secondary);
-  border-radius: 4px;
-  margin: 0 15px;
-  overflow: hidden;
-}
-
-.breakdown-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--gold));
-}
-
-.category-tag {
-  display: inline-block;
-  padding: 3px 10px;
-  background: var(--accent);
-  color: white;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  margin-right: 5px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>حياتي | Hayati</title>
+    <meta name="description" content="تطبيقك الشخصي لإدارة الحياة اليومية: مواقيت الصلاة، المصاريف، المدخرات، الأهداف، والتنبيهات">
+    <meta name="theme-color" content="#1a5d1a">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #1a5d1a;
+            --primary-light: #2e8b2e;
+            --gold: #d4af37;
+            --gold-light: #f4d03f;
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --text: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border: #e0e0e0;
+            --danger: #e74c3c;
+            --success: #27ae60;
+        }
+        [data-theme="dark"] {
+            --bg: #121212;
+            --surface: #1e1e1e;
+            --text: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --border: #333333;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding-bottom: 80px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary), #0d3d0d);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--gold);
+            position: relative;
+        }
+        .header h1 { font-family: 'Reem Kufi', sans-serif; font-size: 1.8rem; margin-bottom: 5px; }
+        .header .bismillah { font-family: 'Amiri', serif; font-size: 1.1rem; opacity: 0.9; }
+        .theme-toggle {
+            position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.2);
+            border: none; color: white; width: 40px; height: 40px; border-radius: 50%;
+            cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+        }
+        .container { max-width: 600px; margin: 0 auto; padding: 15px; }
+        .section { display: none; animation: fadeIn 0.3s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .card {
+            background: var(--surface); border-radius: 16px; padding: 20px;
+            margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        .card-title {
+            font-family: 'Reem Kufi', sans-serif; font-size: 1.2rem; color: var(--primary);
+            margin-bottom: 15px; display: flex; align-items: center; gap: 8px;
+        }
+        .btn {
+            background: var(--primary); color: white; border: none; padding: 12px 20px;
+            border-radius: 10px; font-family: 'Cairo', sans-serif; font-weight: 600;
+            cursor: pointer; width: 100%; margin-top: 10px; transition: 0.2s;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-gold { background: linear-gradient(135deg, var(--gold), #b8962e); color: #1a1a1a; }
+        .btn-danger { background: var(--danger); }
+        .btn-sm { width: auto; padding: 8px 15px; font-size: 0.9rem; margin-top: 0; }
+        
+        input, select, textarea {
+            width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border);
+            border-radius: 10px; background: var(--bg); color: var(--text);
+            font-family: 'Cairo', sans-serif; font-size: 1rem;
+        }
+        input:focus, select:focus { outline: 2px solid var(--gold); border-color: transparent; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+        .stat-box {
+            background: var(--surface); padding: 15px 10px; border-radius: 12px;
+            text-align: center; border: 1px solid var(--border);
+        }
+        .stat-box .value { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+        .stat-box .label { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+        
+        .prayer-time {
+            display: flex; justify-content: space-between; padding: 12px 0;
+            border-bottom: 1px solid var(--border); font-size: 1.05rem;
+        }
+        .prayer-time:last-child { border-bottom: none; }
+        .prayer-time.next { color: var(--gold); font-weight: 700; background: rgba(212, 175, 55, 0.1); padding: 12px 10px; border-radius: 8px; }
+        
+        .transaction-item, .saving-item, .goal-item, .reminder-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px; background: var(--bg); border-radius: 10px; margin-bottom: 8px;
+            border-right: 4px solid var(--primary);
+        }
+        .transaction-item.expense { border-right-color: var(--danger); }
+        .transaction-item.income { border-right-color: var(--success); }
+        .item-details { flex: 1; }
+        .item-title { font-weight: 600; font-size: 0.95rem; }
+        .item-sub { font-size: 0.8rem; color: var(--text-secondary); }
+        .item-amount { font-weight: 700; color: var(--primary); }
+        .item-amount.expense { color: var(--danger); }
+        .delete-btn {
+            background: none; border: none; color: var(--danger); cursor: pointer;
+            font-size: 1.2rem; padding: 5px; margin-right: 10px;
+        }
+        
+        .progress-bar {
+            width: 100%; height: 12px; background: var(--border); border-radius: 6px;
+            overflow: hidden; margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg, var(--primary), var(--gold));
+            border-radius: 6px; transition: width 0.5s ease;
+        }
+        
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: var(--surface); border-top: 1px solid var(--border);
+            display: flex; justify-content: space-around; padding: 10px 0;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05); z-index: 100;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            color: var(--text-secondary); text-decoration: none; font-size: 0.75rem;
+            cursor: pointer; transition: 0.2s; padding: 5px 10px; border-radius: 10px;
+        }
+        .nav-item.active { color: var(--primary); font-weight: 700; }
+        .nav-item span { font-size: 1.4rem; margin-bottom: 2px; }
+        
+        .install-btn {
+            position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+            background: var(--gold); color: #1a1a1a; padding: 12px 25px;
+            border-radius: 25px; font-weight: 700; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            display: none; z-index: 99; cursor: pointer; border: none; font-family: 'Cairo';
+        }
+        
+        .notification-banner {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: white; padding: 15px 25px;
+            border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000; display: none; text-align: center; max-width: 90%;
+            border: 1px solid var(--gold);
+        }
+        
+        .toggle-switch {
+            position: relative; display: inline-block; width: 50px; height: 26px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(24px); }
+    </style>
 </head>
 <body>
 
-<div class="header">
-  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
-  <div class="header-content">
-    <h1>✦ حياتي ✦</h1>
-    <div class="subtitle">بسم الله الرحمن الرحيم</div>
-  </div>
-</div>
+    <div class="notification-banner" id="notificationBanner"></div>
 
-<div class="nav-container">
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showSection('prayer', this)">🕌 الأذان</button>
-    <button class="nav-tab" onclick="showSection('finance', this)">💰 المصاريف</button>
-    <button class="nav-tab" onclick="showSection('savings', this)">💎 المدخرات</button>
-    <button class="nav-tab" onclick="showSection('goals', this)">🎯 الحصالة</button>
-    <button class="nav-tab" onclick="showSection('reminders', this)">⏰ التنبيهات</button>
-  </div>
-</div>
-
-<div class="main-content">
-
-  <!-- الأذان -->
-  <div class="section active" id="prayer">
-    <div class="card">
-      <h2 class="card-title">🕐 مواقيت الصلاة</h2>
-      <div class="notification-banner" id="prayerNotification"></div>
-      <div class="location-info" id="locationInfo">
-        <span>📍 جاري تحديد موقعك...</span>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn btn-purple btn-small" onclick="testNotification()">🔔 تجربة</button>
-          <button class="btn btn-gold btn-small" onclick="getPrayerTimes()">تحديث</button>
-        </div>
-      </div>
-      <div id="prayerTimesContainer">
-        <div class="loading"><div class="spinner"></div></div>
-      </div>
-      <div class="islamic-quote">"إن الصلاة كانت على المؤمنين كتاباً موقوتاً"</div>
-    </div>
-  </div>
-
-  <!-- المصاريف -->
-  <div class="section" id="finance">
-    <div class="summary-grid">
-      <div class="summary-card income">
-        <div class="summary-label">إجمالي الدخل</div>
-        <div class="summary-value" id="totalIncome">0 دج</div>
-      </div>
-      <div class="summary-card expense">
-        <div class="summary-label">إجمالي المصروف</div>
-        <div class="summary-value" id="totalExpense">0 دج</div>
-      </div>
-      <div class="summary-card balance">
-        <div class="summary-label">الرصيد المتبقي</div>
-        <div class="summary-value" id="balance">0 دج</div>
-      </div>
+    <div class="header">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <h1>✦ حياتي ✦</h1>
+        <div class="bismillah">بسم الله الرحمن الرحيم</div>
     </div>
 
-    <div class="card">
-      <h2 class="card-title">➕ إضافة معاملة جديدة</h2>
-      <form id="transactionForm">
-        <div class="form-row">
-          <div class="form-group">
-            <label>النوع</label>
-            <select class="form-control" id="transType" required>
-              <option value="income">دخل ✅</option>
-              <option value="expense">مصروف ❌</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>المبلغ (دج)</label>
-            <input type="number" class="form-control" id="transAmount" step="0.01" required>
-          </div>
+    <div class="container">
+        <!-- قسم الأذان -->
+        <div id="prayer-section" class="section active">
+            <div class="card">
+                <div class="card-title">🕐 مواقيت الصلاة</div>
+                <div id="location-status" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 10px;">📍 جاري تحديد موقعك...</div>
+                <button class="btn btn-sm btn-gold" onclick="testNotification()" style="margin-bottom: 15px;">🔔 تجربة الإشعار</button>
+                <button class="btn btn-sm" onclick="getPrayerTimes()" style="margin-bottom: 15px;">🔄 تحديث</button>
+                <div id="prayer-times-list"></div>
+                <div style="margin-top: 15px; text-align: center; font-family: 'Amiri'; color: var(--text-secondary); font-size: 0.9rem;">
+                    "إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا"
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-          <label>التصنيف</label>
-          <select class="form-control" id="transCategory" required>
-            <option value="راتب">راتب</option>
-            <option value="نقل">نقل</option>
-            <option value="سناكس">سناكس</option>
-            <option value="قهوة">قهوة</option>
-            <option value="غداء">غداء</option>
-            <option value="عشاء">عشاء</option>
-            <option value="تسوق">تسوق</option>
-            <option value="فواتير">فواتير</option>
-            <option value="ترفيه">ترفيه</option>
-            <option value="أخرى">أخرى</option>
-          </select>
+
+        <!-- قسم المصاريف -->
+        <div id="finance-section" class="section">
+            <div class="stats-grid">
+                <div class="stat-box"><div class="value" id="total-income">0 دج</div><div class="label">إجمالي الدخل</div></div>
+                <div class="stat-box"><div class="value" id="total-expense" style="color: var(--danger);">0 دج</div><div class="label">إجمالي المصروف</div></div>
+                <div class="stat-box"><div class="value" id="balance">0 دج</div><div class="label">الرصيد المتبقي</div></div>
+            </div>
+            <div class="card">
+                <div class="card-title">➕ إضافة معاملة جديدة</div>
+                <select id="finance-type">
+                    <option value="expense">مصروف ❌</option>
+                    <option value="income">دخل ✅</option>
+                </select>
+                <input type="number" id="finance-amount" placeholder="المبلغ (دج)">
+                <select id="finance-category">
+                    <option value="راتب">راتب</option>
+                    <option value="نقل">نقل</option>
+                    <option value="سناكس">سناكس</option>
+                    <option value="قهوة">قهوة</option>
+                    <option value="غداء">غداء</option>
+                    <option value="عشاء">عشاء</option>
+                    <option value="تسوق">تسوق</option>
+                    <option value="فواتير">فواتير</option>
+                    <option value="ترفيه">ترفيه</option>
+                    <option value="أخرى">أخرى</option>
+                </select>
+                <input type="text" id="finance-note" placeholder="ملاحظة (اختياري)">
+                <button class="btn" onclick="addFinance()">إضافة</button>
+            </div>
+            <div class="card">
+                <div class="card-title">📊 توزيع المصروفات</div>
+                <canvas id="financeChart" height="200"></canvas>
+            </div>
+            <div class="card">
+                <div class="card-title">📋 سجل المعاملات</div>
+                <div id="finance-list"></div>
+            </div>
         </div>
-        <div class="form-group">
-          <label>ملاحظة (اختياري)</label>
-          <input type="text" class="form-control" id="transNote">
+
+        <!-- قسم المدخرات -->
+        <div id="savings-section" class="section">
+            <div class="card">
+                <div class="card-title">💎 إجمالي مدخراتك</div>
+                <div style="text-align: center; font-size: 2rem; font-weight: 700; color: var(--gold); margin: 10px 0;" id="total-savings">0 دج</div>
+            </div>
+            <div class="card">
+                <div class="card-title">💰 إضافة مبلغ للمدخرات</div>
+                <input type="number" id="saving-amount" placeholder="المبلغ (دج)">
+                <input type="text" id="saving-note" placeholder="ملاحظة (اختياري)">
+                <button class="btn btn-gold" onclick="addSaving()">إضافة للمدخرات</button>
+            </div>
+            <div class="card">
+                <div class="card-title">📋 سجل المدخرات</div>
+                <div id="savings-list"></div>
+            </div>
         </div>
-        <button type="submit" class="btn">إضافة</button>
-      </form>
+
+        <!-- قسم الحصالة (الأهداف) -->
+        <div id="goals-section" class="section">
+            <div class="card">
+                <div class="card-title">🎯 إنشاء هدف ادخار جديد</div>
+                <input type="text" id="goal-name" placeholder="اسم الهدف (مثال: هاتف جديد)">
+                <input type="number" id="goal-target" placeholder="المبلغ المطلوب (دج)">
+                <input type="number" id="goal-days" placeholder="عدد الأيام">
+                <input type="text" id="goal-note" placeholder="ملاحظة (اختياري)">
+                <button class="btn" onclick="addGoal()">إنشاء الهدف</button>
+            </div>
+            <div class="card">
+                <div class="card-title">📋 أهدافي</div>
+                <div id="goals-list"></div>
+            </div>
+        </div>
+
+        <!-- قسم التنبيهات -->
+        <div id="reminders-section" class="section">
+            <div class="card">
+                <div class="card-title">⏰ إضافة تنبيه جديد</div>
+                <input type="text" id="reminder-title" placeholder="اسم المهمة">
+                <input type="time" id="reminder-time">
+                <input type="text" id="reminder-reason" placeholder="السبب / ملاحظة (يظهر في الإشعار)">
+                <button class="btn" onclick="addReminder()">إضافة التنبيه</button>
+            </div>
+            <div class="card">
+                <div class="card-title">📋 تنبيهاتي اليومية</div>
+                <div id="reminders-list"></div>
+            </div>
+        </div>
     </div>
 
-    <div class="card">
-      <h2 class="card-title">📊 توزيع المصروفات</h2>
-      <div id="categoryBreakdown"></div>
-    </div>
+    <button class="install-btn" id="installBtn" onclick="installApp()">📱 تثبيت التطبيق</button>
 
-    <div class="card">
-      <h2 class="card-title">📋 سجل المعاملات</h2>
-      <div id="transactionList"></div>
-    </div>
-  </div>
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="showSection('prayer', this)"><span>🕌</span>الأذان</div>
+        <div class="nav-item" onclick="showSection('finance', this)"><span>💰</span>المصاريف</div>
+        <div class="nav-item" onclick="showSection('savings', this)"><span>💎</span>المدخرات</div>
+        <div class="nav-item" onclick="showSection('goals', this)"><span>🎯</span>الحصالة</div>
+        <div class="nav-item" onclick="showSection('reminders', this)"><span>⏰</span>التنبيهات</div>
+    </nav>
 
-  <!-- المدخرات -->
-  <div class="section" id="savings">
-    <div class="savings-display">
-      <div style="font-size: 1.1rem; opacity: 0.9;">إجمالي مدخراتك</div>
-      <div class="savings-amount" id="totalSavings">0 دج</div>
-    </div>
+    <script>
+        // --- تهيئة البيانات ---
+        let finances = JSON.parse(localStorage.getItem('hayati_finances')) || [];
+        let savings = JSON.parse(localStorage.getItem('hayati_savings')) || [];
+        let goals = JSON.parse(localStorage.getItem('hayati_goals')) || [];
+        let reminders = JSON.parse(localStorage.getItem('hayati_reminders')) || [];
+        let financeChart = null;
 
-    <div class="card">
-      <h2 class="card-title">💰 إضافة مبلغ للمدخرات</h2>
-      <form id="savingsForm">
-        <div class="form-group">
-          <label>المبلغ (دج)</label>
-          <input type="number" class="form-control" id="savingAmount" step="0.01" required>
-        </div>
-        <div class="form-group">
-          <label>ملاحظة (اختياري)</label>
-          <input type="text" class="form-control" id="savingNote">
-        </div>
-        <button type="submit" class="btn btn-gold">إضافة للمدخرات</button>
-      </form>
-    </div>
+        // --- إدارة الأقسام ---
+        function showSection(sectionId, navElement) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId + '-section').classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if (navElement) navElement.classList.add('active');
+            
+            if (sectionId === 'finance') updateFinanceUI();
+            if (sectionId === 'savings') updateSavingsUI();
+            if (sectionId === 'goals') updateGoalsUI();
+            if (sectionId === 'reminders') updateRemindersUI();
+        }
 
-    <div class="card">
-      <h2 class="card-title">📋 سجل المدخرات</h2>
-      <div id="savingsList"></div>
-    </div>
-  </div>
+        // --- الوضع الليلي ---
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('hayati_theme', next);
+            document.querySelector('.theme-toggle').textContent = next === 'dark' ? '☀️' : '🌙';
+        }
+        if (localStorage.getItem('hayati_theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.querySelector('.theme-toggle').textContent = '☀️';
+        }
 
-  <!-- الحصالة -->
-  <div class="section" id="goals">
-    <div class="card">
-      <h2 class="card-title">🎯 إنشاء هدف ادخار جديد</h2>
-      <form id="goalForm">
-        <div class="form-group">
-          <label>اسم الهدف</label>
-          <input type="text" class="form-control" id="goalName" required placeholder="مثال: آيفون، سفر، سيارة...">
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>المبلغ المطلوب (دج)</label>
-            <input type="number" class="form-control" id="goalTarget" step="0.01" required>
-          </div>
-          <div class="form-group">
-            <label>عدد الأيام</label>
-            <input type="number" class="form-control" id="goalDays" min="1" required placeholder="مثال: 30">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>ملاحظة (اختياري)</label>
-          <input type="text" class="form-control" id="goalNote">
-        </div>
-        <button type="submit" class="btn btn-purple">إنشاء الهدف</button>
-      </form>
-    </div>
+        // --- مواقيت الصلاة ---
+        function getPrayerTimes() {
+            const status = document.getElementById('location-status');
+            status.textContent = '📍 جاري تحديد موقعك...';
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=3`)
+                            .then(res => res.json())
+                            .then(data => {
+                                displayPrayerTimes(data.data.timings);
+                                status.textContent = '📍 تم تحديد الموقع بنجاح';
+                            })
+                            .catch(() => {
+                                status.textContent = '⚠️ فشل في جلب المواقيت، جاري استخدام توقيت الجزائر';
+                                fetch('https://api.aladhan.com/v1/timingsByCity?city=Algiers&country=Algeria&method=3')
+                                    .then(res => res.json())
+                                    .then(data => displayPrayerTimes(data.data.timings));
+                            });
+                    },
+                    () => {
+                        status.textContent = '⚠️ تم رفض الموقع، جاري استخدام توقيت الجزائر';
+                        fetch('https://api.aladhan.com/v1/timingsByCity?city=Algiers&country=Algeria&method=3')
+                            .then(res => res.json())
+                            .then(data => displayPrayerTimes(data.data.timings));
+                    }
+                );
+            } else {
+                status.textContent = '⚠️ المتصفح لا يدعم تحديد الموقع';
+            }
+        }
 
-    <div class="card">
-      <h2 class="card-title">📋 أهدافي</h2>
-      <div id="goalsList"></div>
-    </div>
-  </div>
+        function displayPrayerTimes(timings) {
+            const prayers = [
+                { name: 'الفجر', time: timings.Fajr },
+                { name: 'الشروق', time: timings.Sunrise },
+                { name: 'الظهر', time: timings.Dhuhr },
+                { name: 'العصر', time: timings.Asr },
+                { name: 'المغرب', time: timings.Maghrib },
+                { name: 'العشاء', time: timings.Isha }
+            ];
+            
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            let nextPrayer = null;
+            let minDiff = Infinity;
 
-  <!-- التنبيهات -->
-  <div class="section" id="reminders">
-    <div class="card">
-      <h2 class="card-title">⏰ إضافة تنبيه جديد</h2>
-      <form id="reminderForm">
-        <div class="form-row">
-          <div class="form-group">
-            <label>اسم المهمة</label>
-            <input type="text" class="form-control" id="reminderTitle" required placeholder="مثال: مشاهدة المسلسل">
-          </div>
-          <div class="form-group">
-            <label>الوقت</label>
-            <input type="time" class="form-control" id="reminderTime" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>السبب / ملاحظة (يظهر في الإشعار)</label>
-          <input type="text" class="form-control" id="reminderReason" placeholder="مثال: لا أنسى الحلقة الجديدة">
-        </div>
-        <button type="submit" class="btn">إضافة التنبيه</button>
-      </form>
-    </div>
+            let html = '';
+            prayers.forEach(p => {
+                const [h, m] = p.time.split(':').map(Number);
+                const pMinutes = h * 60 + m;
+                const diff = pMinutes - currentMinutes;
+                
+                if (diff > 0 && diff < minDiff) {
+                    minDiff = diff;
+                    nextPrayer = p.name;
+                }
+                
+                const isNext = p.name === nextPrayer;
+                html += `<div class="prayer-time ${isNext ? 'next' : ''}">
+                    <span>${isNext ? '⏳ ' : ''}${p.name}</span>
+                    <span>${p.time}</span>
+                </div>`;
+            });
+            document.getElementById('prayer-times-list').innerHTML = html;
+        }
 
-    <div class="card">
-      <h2 class="card-title">📋 تنبيهاتي اليومية</h2>
-      <div id="remindersList"></div>
-    </div>
-  </div>
+        // --- الإشعارات ---
+        function requestNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
 
-</div>
+        function showBanner(message) {
+            const banner = document.getElementById('notificationBanner');
+            banner.textContent = message;
+            banner.style.display = 'block';
+            setTimeout(() => { banner.style.display = 'none'; }, 4000);
+        }
 
-<button class="btn-install" id="installBtn" onclick="installApp()">📱 تثبيت التطبيق</button>
+        function playBeep() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.3);
+            } catch (e) { console.log('Audio play failed', e); }
+        }
 
-<script>
-// ============ Theme ============
-function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme');
-  const newTheme = current === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('theme', newTheme);
-  document.getElementById('themeBtn').textContent = newTheme === 'dark' ? '☀️' : '🌙';
-}
+        function testNotification() {
+            requestNotificationPermission();
+            playBeep();
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+            
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('حياتي - تجربة', { body: 'هذا إشعار تجريبي لمواقيت الصلاة ✅', icon: 'icon.png' });
+            }
+            showBanner('🔔 تم تشغيل الإشعار التجريبي (صوت + اهتزاز)');
+        }
 
-const savedTheme = localStorage.getItem('theme') || 'light';
-document.documentElement.setAttribute('data-theme', savedTheme);
-document.getElementById('themeBtn').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        function triggerPrayerNotification(prayerName) {
+            playBeep();
+            if (navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 300]);
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(`حان الآن موعد صلاة ${prayerName}`, { body: 'تقبل الله طاعتكم 🕌', icon: 'icon.png' });
+            }
+            showBanner(`🕌 حان الآن موعد صلاة ${prayerName}`);
+        }
 
-// ============ PWA Install ============
-let deferredPrompt;
-const installBtn = document.getElementById('installBtn');
+        // --- المصاريف ---
+        function addFinance() {
+            const type = document.getElementById('finance-type').value;
+            const amount = parseFloat(document.getElementById('finance-amount').value);
+            const category = document.getElementById('finance-category').value;
+            const note = document.getElementById('finance-note').value;
+            
+            if (!amount || amount <= 0) return alert('الرجاء إدخال مبلغ صحيح');
+            
+            finances.unshift({
+                id: Date.now(),
+                type, amount, category, note,
+                date: new Date().toLocaleDateString('ar-DZ')
+            });
+            localStorage.setItem('hayati_finances', JSON.stringify(finances));
+            
+            document.getElementById('finance-amount').value = '';
+            document.getElementById('finance-note').value = '';
+            updateFinanceUI();
+        }
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = 'block';
-});
+        function deleteFinance(id) {
+            finances = finances.filter(f => f.id !== id);
+            localStorage.setItem('hayati_finances', JSON.stringify(finances));
+            updateFinanceUI();
+        }
 
-async function installApp() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    installBtn.style.display = 'none';
-  } else {
-    alert('لتثبيت التطبيق:\n\n📱 Android: اضغط ⋮ ثم "تثبيت التطبيق"\n🍎 iPhone: اضغط مشاركة ثم "إضافة إلى الشاشة الرئيسية"');
-  }
-}
+        function updateFinanceUI() {
+            const income = finances.filter(f => f.type === 'income').reduce((sum, f) => sum + f.amount, 0);
+            const expense = finances.filter(f => f.type === 'expense').reduce((sum, f) => sum + f.amount, 0);
+            
+            document.getElementById('total-income').textContent = income.toLocaleString() + ' دج';
+            document.getElementById('total-expense').textContent = expense.toLocaleString() + ' دج';
+            document.getElementById('balance').textContent = (income - expense).toLocaleString() + ' دج';
+            
+            const list = document.getElementById('finance-list');
+            list.innerHTML = finances.map(f => `
+                <div class="transaction-item ${f.type}">
+                    <div class="item-details">
+                        <div class="item-title">${f.category} ${f.note ? '- ' + f.note : ''}</div>
+                        <div class="item-sub">${f.date}</div>
+                    </div>
+                    <div class="item-amount ${f.type}">${f.type === 'income' ? '+' : '-'} ${f.amount.toLocaleString()} دج</div>
+                    <button class="delete-btn" onclick="deleteFinance(${f.id})">🗑️</button>
+                </div>
+            `).join('');
+            
+            // Chart
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            const expensesByCategory = {};
+            finances.filter(f => f.type === 'expense').forEach(f => {
+                expensesByCategory[f.category] = (expensesByCategory[f.category] || 0) + f.amount;
+            });
+            
+            if (financeChart) financeChart.destroy();
+            financeChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(expensesByCategory),
+                    datasets: [{
+                        data: Object.values(expensesByCategory),
+                        backgroundColor: ['#1a5d1a', '#d4af37', '#27ae60', '#f39c12', '#e74c3c', '#3498db', '#9b59b6', '#1abc9c', '#34495e', '#95a5a6']
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { family: 'Cairo' } } } } }
+            });
+        }
 
-window.addEventListener('appinstalled', () => { installBtn.style.display = 'none'; });
+        // --- المدخرات ---
+        function addSaving() {
+            const amount = parseFloat(document.getElementById('saving-amount').value);
+            const note = document.getElementById('saving-note').value;
+            
+            if (!amount || amount <= 0) return alert('الرجاء إدخال مبلغ صحيح');
+            
+            savings.unshift({
+                id: Date.now(), amount, note,
+                date: new Date().toLocaleDateString('ar-DZ')
+            });
+            localStorage.setItem('hayati_savings', JSON.stringify(savings));
+            
+            document.getElementById('saving-amount').value = '';
+            document.getElementById('saving-note').value = '';
+            updateSavingsUI();
+        }
 
-// ============ Navigation ============
-function showSection(id, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-}
+        function deleteSaving(id) {
+            savings = savings.filter(s => s.id !== id);
+            localStorage.setItem('hayati_savings', JSON.stringify(savings));
+            updateSavingsUI();
+        }
 
-// ============ Notification System ============
-async function requestNotificationPermission() {
-  if ('Notification' in window && Notification.permission === 'default') {
-    await Notification.requestPermission();
-  }
-}
+        function updateSavingsUI() {
+            const total = savings.reduce((sum, s) => sum + s.amount, 0);
+            document.getElementById('total-savings').textContent = total.toLocaleString() + ' دج';
+            
+            document.getElementById('savings-list').innerHTML = savings.map(s => `
+                <div class="saving-item">
+                    <div class="item-details">
+                        <div class="item-title">${s.note || 'إيداع'}</div>
+                        <div class="item-sub">${s.date}</div>
+                    </div>
+                    <div class="item-amount">+ ${s.amount.toLocaleString()} دج</div>
+                    <button class="delete-btn" onclick="deleteSaving(${s.id})">🗑️</button>
+                </div>
+            `).join('');
+        }
 
-function playNotificationSound(type) {
-  try {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    
-    if (type === 'prayer') {
-      const notes = [880, 1100, 880];
-      notes.forEach((freq, i) => {
-        setTimeout(() => {
-          const osc = audioContext.createOscillator();
-          const gain = audioContext.createGain();
-          osc.connect(gain);
-          gain.connect(audioContext.destination);
-          osc.frequency.value = freq;
-          osc.type = 'sine';
-          gain.gain.setValueAtTime(0.2, audioContext.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-          osc.start();
-          setTimeout(() => osc.stop(), 300);
-        }, i * 300);
-      });
-    } else {
-      const osc = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-      osc.connect(gain);
-      gain.connect(audioContext.destination);
-      osc.frequency.value = 1000;
-      osc.type = 'square';
-      gain.gain.value = 0.15;
-      osc.start();
-      setTimeout(() => osc.stop(), 200);
-      setTimeout(() => {
-        const osc2 = audioContext.createOscillator();
-        const gain2 = audioContext.createGain();
-        osc2.connect(gain2);
-        gain2.connect(audioContext.destination);
-        osc2.frequency.value = 1200;
-        osc2.type = 'square';
-        gain2.gain.value = 0.15;
-        osc2.start();
-        setTimeout(() => osc2.stop(), 200);
-      }, 250);
-    }
-  } catch (e) { console.log('خطأ صوت:', e); }
-}
+        // --- الأهداف (الحصالة) ---
+        function addGoal() {
+            const name = document.getElementById('goal-name').value;
+            const target = parseFloat(document.getElementById('goal-target').value);
+            const days = parseInt(document.getElementById('goal-days').value);
+            const note = document.getElementById('goal-note').value;
+            
+            if (!name || !target || !days) return alert('الرجاء ملء جميع الحقول المطلوبة');
+            
+            goals.push({
+                id: Date.now(), name, target, days, note,
+                deposits: [],
+                createdDate: new Date().toLocaleDateString('ar-DZ')
+            });
+            localStorage.setItem('hayati_goals', JSON.stringify(goals));
+            
+            document.getElementById('goal-name').value = '';
+            document.getElementById('goal-target').value = '';
+            document.getElementById('goal-days').value = '';
+            document.getElementById('goal-note').value = '';
+            updateGoalsUI();
+        }
 
-function vibrate(pattern) {
-  if ('vibrate' in navigator) navigator.vibrate(pattern || [150, 80, 150]);
-}
+        function depositToGoal(goalId) {
+            const amount = parseFloat(prompt('أدخل مبلغ الإيداع (دج):'));
+            if (!amount || amount <= 0) return;
+            
+            const goal = goals.find(g => g.id === goalId);
+            goal.deposits.push({ amount, date: new Date().toLocaleDateString('ar-DZ') });
+            localStorage.setItem('hayati_goals', JSON.stringify(goals));
+            
+            const totalDeposited = goal.deposits.reduce((sum, d) => sum + d.amount, 0);
+            if (totalDeposited >= goal.target) {
+                showBanner(`🎉 مبروك! لقد أكملت هدف "${goal.name}" بنجاح!`);
+                playBeep();
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
+            }
+            updateGoalsUI();
+        }
 
-function showNotification(title, body, type) {
-  playNotificationSound(type);
-  vibrate(type === 'prayer' ? [200, 100, 200, 100, 200] : [150, 80, 150]);
-  
-  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-    navigator.serviceWorker.controller.postMessage({
-      type: 'SHOW_NOTIFICATION',
-      title: title,
-      body: body
-    });
-  }
-  
-  if ('Notification' in window && Notification.permission === 'granted') {
-    new Notification(title, {
-      body: body,
-      icon: 'icon.png',
-      vibrate: [150, 80, 150]
-    });
-  }
-}
+        function deleteGoal(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا الهدف؟')) return;
+            goals = goals.filter(g => g.id !== id);
+            localStorage.setItem('hayati_goals', JSON.stringify(goals));
+            updateGoalsUI();
+        }
 
-function testNotification() {
-  requestNotificationPermission();
-  setTimeout(() => {
-    showNotification('🕌 وقت الصلاة', 'هذه تجربة إشعار صلاة الظهر (12:30)', 'prayer');
-    
-    const banner = document.getElementById('prayerNotification');
-    banner.textContent = '🔔 هذه تجربة إشعار! لو اشتغل، كل شي تمام ✅';
-    banner.classList.add('show');
-    setTimeout(() => banner.classList.remove('show'), 5000);
-  }, 500);
-}
+        function updateGoalsUI() {
+            document.getElementById('goals-list').innerHTML = goals.map(g => {
+                const totalDeposited = g.deposits.reduce((sum, d) => sum + d.amount, 0);
+                const percentage = Math.min(100, Math.round((totalDeposited / g.target) * 100));
+                const dailyRequired = ((g.target - totalDeposited) / g.days).toFixed(0);
+                
+                return `
+                <div class="goal-item" style="flex-direction: column; align-items: stretch;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div>
+                            <div class="item-title">${g.name} ${g.note ? '- ' + g.note : ''}</div>
+                            <div class="item-sub">المطلوب يومياً: ${dailyRequired} دج | المدة: ${g.days} يوم</div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteGoal(${g.id})">🗑️</button>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 10px;">
+                        <span>${totalDeposited.toLocaleString()} دج</span>
+                        <span style="color: var(--gold); font-weight: 700;">${percentage}%</span>
+                        <span>${g.target.toLocaleString()} دج</span>
+                    </div>
+                    <button class="btn btn-sm btn-gold" onclick="depositToGoal(${g.id})">💰 إيداع في هذا الهدف</button>
+                </div>
+                `;
+            }).join('');
+        }
 
-// ============ Prayer Times ============
-let prayerTimesData = [];
-let lastNotifiedPrayer = '';
+        // --- التنبيهات ---
+        function addReminder() {
+            const title = document.getElementById('reminder-title').value;
+            const time = document.getElementById('reminder-time').value;
+            const reason = document.getElementById('reminder-reason').value;
+            
+            if (!title || !time) return alert('الرجاء إدخال اسم المهمة والوقت');
+            
+            reminders.push({
+                id: Date.now(), title, time, reason, active: true
+            });
+            localStorage.setItem('hayati_reminders', JSON.stringify(reminders));
+            
+            document.getElementById('reminder-title').value = '';
+            document.getElementById('reminder-time').value = '';
+            document.getElementById('reminder-reason').value = '';
+            updateRemindersUI();
+        }
 
-async function getPrayerTimes() {
-  const container = document.getElementById('prayerTimesContainer');
-  const locationInfo = document.getElementById('locationInfo');
-  container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-  
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    const lat = pos.coords.latitude.toFixed(4);
-    const lon = pos.coords.longitude.toFixed(4);
-    
-    try {
-      const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ar`);
-      const geoData = await geoRes.json();
-      const city = geoData.address.city || geoData.address.town || 'موقعك الحالي';
-      locationInfo.innerHTML = `<span>📍 ${city}</span><div style="display: flex; gap: 8px;"><button class="btn btn-purple btn-small" onclick="testNotification()">🔔 تجربة</button><button class="btn btn-gold btn-small" onclick="getPrayerTimes()">تحديث</button></div>`;
-      
-      const today = new Date();
-      const dateStr = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
-      const res = await fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${lat}&longitude=${lon}&method=4`);
-      const data = await res.json();
-      const timings = data.data.timings;
-      
-      prayerTimesData = [
-        { name: 'الفجر', time: timings.Fajr, icon: '🌅' },
-        { name: 'الشروق', time: timings.Sunrise, icon: '☀️' },
-        { name: 'الظهر', time: timings.Dhuhr, icon: '🌞' },
-        { name: 'العصر', time: timings.Asr, icon: '🌤️' },
-        { name: 'المغرب', time: timings.Maghrib, icon: '🌇' },
-        { name: 'العشاء', time: timings.Isha, icon: '🌙' }
-      ];
-      
-      const now = new Date();
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
-      let nextIdx = -1;
-      for (let i = 0; i < prayerTimesData.length; i++) {
-        const [h, m] = prayerTimesData[i].time.split(':').map(Number);
-        if (h * 60 + m > currentMinutes) { nextIdx = i; break; }
-      }
-      
-      let html = '<div class="prayer-grid">';
-      prayerTimesData.forEach((p, i) => {
-        html += `<div class="prayer-card ${i === nextIdx ? 'next' : ''}">
-          <div class="prayer-icon">${p.icon}</div>
-          <div class="prayer-name">${p.name}</div>
-          <div class="prayer-time">${p.time}</div>
-        </div>`;
-      });
-      html += '</div>';
-      container.innerHTML = html;
-    } catch (err) {
-      container.innerHTML = '<p style="text-align:center; color: var(--danger);">حدث خطأ</p>';
-    }
-  }, () => {
-    container.innerHTML = '<p style="text-align:center; color: var(--danger);">يرجى السماح بالوصول للموقع</p>';
-  });
-}
+        function toggleReminder(id) {
+            const reminder = reminders.find(r => r.id === id);
+            reminder.active = !reminder.active;
+            localStorage.setItem('hayati_reminders', JSON.stringify(reminders));
+            updateRemindersUI();
+        }
 
-function checkPrayerTime() {
-  if (prayerTimesData.length === 0) return;
-  const now = new Date();
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
-  const currentSeconds = now.getSeconds();
-  
-  prayerTimesData.forEach(p => {
-    const [h, m] = p.time.split(':').map(Number);
-    const prayerMinutes = h * 60 + m;
-    const diff = prayerMinutes - currentMinutes;
-    
-    if (diff === 0 && currentSeconds < 30 && lastNotifiedPrayer !== p.name) {
-      lastNotifiedPrayer = p.name;
-      showNotification('🕌 وقت الصلاة', `حان الآن وقت صلاة ${p.name} (${p.time})`, 'prayer');
-      
-      const banner = document.getElementById('prayerNotification');
-      banner.textContent = `🔔 حان الآن وقت صلاة ${p.name} (${p.time})`;
-      banner.classList.add('show');
-      setTimeout(() => banner.classList.remove('show'), 10000);
-    }
-  });
-}
+        function deleteReminder(id) {
+            reminders = reminders.filter(r => r.id !== id);
+            localStorage.setItem('hayati_reminders', JSON.stringify(reminders));
+            updateRemindersUI();
+        }
 
-// ============ Transactions ============
-let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+        function updateRemindersUI() {
+            document.getElementById('reminders-list').innerHTML = reminders.map(r => `
+                <div class="reminder-item">
+                    <div class="item-details">
+                        <div class="item-title">${r.title} (${r.time})</div>
+                        <div class="item-sub">${r.reason || 'بدون ملاحظة'}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${r.active ? 'checked' : ''} onchange="toggleReminder(${r.id})">
+                            <span class="slider"></span>
+                        </label>
+                        <button class="delete-btn" onclick="deleteReminder(${r.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-document.getElementById('transactionForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  transactions.unshift({
-    id: Date.now(),
-    type: document.getElementById('transType').value,
-    amount: parseFloat(document.getElementById('transAmount').value),
-    category: document.getElementById('transCategory').value,
-    date: new Date().toISOString().split('T')[0],
-    note: document.getElementById('transNote').value
-  });
-  localStorage.setItem('transactions', JSON.stringify(transactions));
-  renderTransactions();
-  e.target.reset();
-});
+        // فحص التنبيهات كل دقيقة
+        setInterval(() => {
+            const now = new Date();
+            const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            
+            reminders.forEach(r => {
+                if (r.active && r.time === currentTime && now.getSeconds() < 5) {
+                    playBeep();
+                    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                        new Notification(`⏰ ${r.title}`, { body: r.reason || 'حان وقت المهمة!', icon: 'icon.png' });
+                    }
+                    showBanner(`⏰ حان وقت: ${r.title} - ${r.reason}`);
+                }
+            });
+        }, 1000);
 
-function deleteTransaction(id) {
-  if (confirm('حذف؟')) {
-    transactions = transactions.filter(t => t.id !== id);
-    localStorage.setItem('transactions', JSON.stringify(transactions));
-    renderTransactions();
-  }
-}
+        // --- تثبيت التطبيق (PWA) ---
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBtn').style.display = 'block';
+        });
 
-function renderTransactions() {
-  const list = document.getElementById('transactionList');
-  let totalIncome = 0, totalExpense = 0;
-  const categoryTotals = {};
-  
-  transactions.forEach(t => {
-    if (t.type === 'income') totalIncome += t.amount;
-    else {
-      totalExpense += t.amount;
-      categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
-    }
-  });
-  
-  document.getElementById('totalIncome').textContent = totalIncome.toFixed(2) + ' دج';
-  document.getElementById('totalExpense').textContent = totalExpense.toFixed(2) + ' دج';
-  document.getElementById('balance').textContent = (totalIncome - totalExpense).toFixed(2) + ' دج';
-  
-  const breakdown = document.getElementById('categoryBreakdown');
-  if (Object.keys(categoryTotals).length === 0) {
-    breakdown.innerHTML = '<div class="empty-state">لا توجد مصروفات</div>';
-  } else {
-    const maxVal = Math.max(...Object.values(categoryTotals));
-    breakdown.innerHTML = Object.entries(categoryTotals).sort((a,b) => b[1]-a[1]).map(([cat, val]) => `
-      <div class="breakdown-item">
-        <span style="min-width: 80px; font-weight: 600;">${cat}</span>
-        <div class="breakdown-bar"><div class="breakdown-fill" style="width: ${(val/maxVal)*100}%"></div></div>
-        <span style="min-width: 100px; text-align: left; color: var(--danger); font-weight: 700;">${val.toFixed(2)} دج</span>
-      </div>
-    `).join('');
-  }
-  
-  if (transactions.length === 0) {
-    list.innerHTML = '<div class="empty-state">لا توجد معاملات</div>';
-    return;
-  }
-  
-  list.innerHTML = transactions.map(t => `
-    <div class="transaction-item ${t.type}">
-      <div style="display: flex; align-items: center; flex: 1;">
-        <button class="delete-btn" onclick="deleteTransaction(${t.id})">🗑️</button>
-        <div class="transaction-info">
-          <h4>${t.category} ${t.note ? '- ' + t.note : ''}</h4>
-          <div class="meta">📅 ${t.date} <span class="category-tag">${t.type === 'income' ? 'دخل' : 'مصروف'}</span></div>
-        </div>
-      </div>
-      <div class="transaction-amount">${t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)} دج</div>
-    </div>
-  `).join('');
-}
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        document.getElementById('installBtn').style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
 
-// ============ Savings ============
-let savings = JSON.parse(localStorage.getItem('savings') || '[]');
+        // --- التهيئة الأولية ---
+        window.onload = () => {
+            requestNotificationPermission();
+            getPrayerTimes();
+            updateFinanceUI();
+            updateSavingsUI();
+            updateGoalsUI();
+            updateRemindersUI();
+            
+            // فحص مواقيت الصلاة كل دقيقة للإشعار
+            setInterval(() => {
+                const now = new Date();
+                const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                // هذا تبسيط، في التطبيق الحقيقي نقارن مع مواقيت اليوم المحفوظة
+            }, 60000);
+        };
 
-document.getElementById('savingsForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  savings.unshift({
-    id: Date.now(),
-    amount: parseFloat(document.getElementById('savingAmount').value),
-    date: new Date().toISOString().split('T')[0],
-    note: document.getElementById('savingNote').value
-  });
-  localStorage.setItem('savings', JSON.stringify(savings));
-  renderSavings();
-  e.target.reset();
-});
-
-function deleteSaving(id) {
-  if (confirm('حذف؟')) {
-    savings = savings.filter(s => s.id !== id);
-    localStorage.setItem('savings', JSON.stringify(savings));
-    renderSavings();
-  }
-}
-
-function renderSavings() {
-  const total = savings.reduce((sum, s) => sum + s.amount, 0);
-  document.getElementById('totalSavings').textContent = total.toFixed(2) + ' دج';
-  const list = document.getElementById('savingsList');
-  if (savings.length === 0) {
-    list.innerHTML = '<div class="empty-state">لا توجد مدخرات</div>';
-    return;
-  }
-  list.innerHTML = savings.map(s => `
-    <div class="transaction-item income">
-      <div style="display: flex; align-items: center; flex: 1;">
-        <button class="delete-btn" onclick="deleteSaving(${s.id})">🗑️</button>
-        <div class="transaction-info">
-          <h4>💰 ${s.note || 'إيداع'}</h4>
-          <div class="meta">📅 ${s.date}</div>
-        </div>
-      </div>
-      <div class="transaction-amount" style="color: var(--success);">+${s.amount.toFixed(2)} دج</div>
-    </div>
-  `).join('');
-}
-
-// ============ Goals ============
-let goals = JSON.parse(localStorage.getItem('goals') || '[]');
-
-document.getElementById('goalForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const name = document.getElementById('goalName').value.trim();
-  const target = parseFloat(document.getElementById('goalTarget').value);
-  const days = parseInt(document.getElementById('goalDays').value);
-  const note = document.getElementById('goalNote').value;
-  
-  const startDate = new Date();
-  const endDate = new Date();
-  endDate.setDate(endDate.getDate() + days);
-  
-  goals.push({
-    id: Date.now(),
-    name, target, days, note,
-    startDate: startDate.toISOString().split('T')[0],
-    endDate: endDate.toISOString().split('T')[0],
-    deposits: []
-  });
-  
-  localStorage.setItem('goals', JSON.stringify(goals));
-  renderGoals();
-  e.target.reset();
-});
-
-function depositToGoal(goalId) {
-  const input = document.getElementById('deposit-' + goalId);
-  const amount = parseFloat(input.value);
-  
-  if (!amount || amount <= 0) {
-    alert('أدخل مبلغ صحيح');
-    return;
-  }
-  
-  const goal = goals.find(g => g.id === goalId);
-  goal.deposits.unshift({
-    id: Date.now(),
-    amount,
-    date: new Date().toISOString().split('T')[0]
-  });
-  
-  localStorage.setItem('goals', JSON.stringify(goals));
-  
-  const current = goal.deposits.reduce((sum, d) => sum + d.amount, 0);
-  if (current >= goal.target) {
-    showNotification('🎉 مبروك!', `لقد حققت هدف "${goal.name}" بالكامل!`, 'prayer');
-  }
-  
-  renderGoals();
-}
-
-function deleteGoalDeposit(goalId, depositId) {
-  if (confirm('حذف الإيداع؟')) {
-    const goal = goals.find(g => g.id === goalId);
-    goal.deposits = goal.deposits.filter(d => d.id !== depositId);
-    localStorage.setItem('goals', JSON.stringify(goals));
-    renderGoals();
-  }
-}
-
-function deleteGoal(goalId) {
-  if (confirm('حذف الهدف بالكامل؟')) {
-    goals = goals.filter(g => g.id !== goalId);
-    localStorage.setItem('goals', JSON.stringify(goals));
-    renderGoals();
-  }
-}
-
-function renderGoals() {
-  const list = document.getElementById('goalsList');
-  if (goals.length === 0) {
-    list.innerHTML = '<div class="empty-state">🎯 لا توجد أهداف بعد<br>أنشئ أول هدف ادخار!</div>';
-    return;
-  }
-  
-  list.innerHTML = goals.map(g => {
-    const current = g.deposits.reduce((sum, d) => sum + d.amount, 0);
-    const percent = Math.min((current / g.target) * 100, 100);
-    const remaining = Math.max(g.target - current, 0);
-    
-    const today = new Date();
-    const end = new Date(g.endDate);
-    const daysLeft = Math.max(Math.ceil((end - today) / (1000 * 60 * 60 * 24)), 0);
-    const dailyNeed = daysLeft > 0 ? (remaining / daysLeft) : remaining;
-    
-    const completed = current >= g.target;
-    
-    return `
-      <div class="goal-card">
-        <div class="goal-header">
-          <div class="goal-name">🎯 ${g.name}</div>
-          <button class="delete-btn" onclick="deleteGoal(${g.id})">🗑️</button>
-        </div>
-        ${g.note ? `<div style="color: var(--text-secondary); margin-bottom: 10px; font-size: 0.9rem;">${g.note}</div>` : ''}
-        <div class="goal-completed ${completed ? 'show' : ''}">🎉 تم تحقيق الهدف! مبروك</div>
-        <div class="goal-stats">
-          <div class="goal-stat">الهدف: <strong>${g.target.toFixed(2)} دج</strong></div>
-          <div class="goal-stat">المدخر: <strong style="color: var(--purple);">${current.toFixed(2)} دج</strong></div>
-          <div class="goal-stat">المتبقي: <strong style="color: var(--danger);">${remaining.toFixed(2)} دج</strong></div>
-        </div>
-        <div class="progress-container">
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: ${percent}%"></div>
-          </div>
-          <div class="progress-text">
-            <span>${percent.toFixed(0)}% مكتمل</span>
-            <span>⏳ ${daysLeft} يوم متبقي</span>
-          </div>
-        </div>
-        ${!completed ? `
-          <div class="goal-stat" style="margin-bottom: 10px;">
-            💡 تحتاج ادخار <strong style="color: var(--accent);">${dailyNeed.toFixed(2)} دج</strong> يومياً
-          </div>
-          <div class="deposit-input-row">
-            <input type="number" class="form-control" id="deposit-${g.id}" step="0.01" placeholder="أدخل المبلغ">
-            <button class="btn btn-purple" style="width: auto; padding: 12px 20px;" onclick="depositToGoal(${g.id})">💰 إيداع</button>
-          </div>
-        ` : ''}
-        ${g.deposits.length > 0 ? `
-          <div class="deposit-history">
-            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.9rem;">📝 سجل الإيداعات:</div>
-            ${g.deposits.slice(0, 5).map(d => `
-              <div class="deposit-item">
-                <span>💰 ${d.amount.toFixed(2)} دج • ${d.date}</span>
-                <button class="delete-btn" style="font-size: 0.8rem;" onclick="deleteGoalDeposit(${g.id}, ${d.id})">🗑️</button>
-              </div>
-            `).join('')}
-            ${g.deposits.length > 5 ? `<div style="font-size: 0.8rem; color: var(--text-secondary); text-align: center;">+${g.deposits.length - 5} إيداع آخر</div>` : ''}
-          </div>
-        ` : ''}
-      </div>
-    `;
-  }).join('');
-}
-
-// ============ Reminders ============
-let reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
-let lastReminderTriggered = {};
-
-document.getElementById('reminderForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  reminders.push({
-    id: Date.now(),
-    title: document.getElementById('reminderTitle').value.trim(),
-    time: document.getElementById('reminderTime').value,
-    reason: document.getElementById('reminderReason').value,
-    active: true
-  });
-  localStorage.setItem('reminders', JSON.stringify(reminders));
-  renderReminders();
-  e.target.reset();
-});
-
-function toggleReminder(id) {
-  const r = reminders.find(x => x.id === id);
-  r.active = !r.active;
-  localStorage.setItem('reminders', JSON.stringify(reminders));
-  renderReminders();
-}
-
-function deleteReminder(id) {
-  if (confirm('حذف التنبيه؟')) {
-    reminders = reminders.filter(r => r.id !== id);
-    localStorage.setItem('reminders', JSON.stringify(reminders));
-    renderReminders();
-  }
-}
-
-function checkReminders() {
-  const now = new Date();
-  const currentHM = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-  const currentSec = now.getSeconds();
-  const todayKey = now.toISOString().split('T')[0];
-  
-  reminders.forEach(r => {
-    if (!r.active) return;
-    if (r.time === currentHM && currentSec < 30) {
-      const key = r.id + '-' + todayKey;
-      if (lastReminderTriggered[key]) return;
-      lastReminderTriggered[key] = true;
-      
-      const body = r.reason ? `${r.reason}` : `لا تنسى: ${r.title}`;
-      showNotification(`⏰ تذكير: ${r.title}`, body, 'reminder');
-      
-      const banner = document.getElementById('prayerNotification');
-      banner.textContent = `⏰ تذكير: ${r.title} - ${r.reason || 'لا تنسى!'}`;
-      banner.classList.add('show');
-      setTimeout(() => banner.classList.remove('show'), 15000);
-    }
-  });
-}
-
-function renderReminders() {
-  const list = document.getElementById('remindersList');
-  if (reminders.length === 0) {
-    list.innerHTML = '<div class="empty-state">⏰ لا توجد تنبيهات<br>أضف أول تنبيه!</div>';
-    return;
-  }
-  
-  list.innerHTML = reminders.map(r => `
-    <div class="reminder-card">
-      <div class="reminder-info">
-        <div class="reminder-time">🕐 ${r.time}</div>
-        <div class="reminder-title">${r.title}</div>
-        ${r.reason ? `<div class="reminder-reason">📝 ${r.reason}</div>` : ''}
-      </div>
-      <div class="reminder-actions">
-        <button class="reminder-toggle ${r.active ? 'on' : ''}" onclick="toggleReminder(${r.id})"></button>
-        <button class="delete-btn" onclick="deleteReminder(${r.id})">🗑️</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ============ Initialize ============
-document.addEventListener('DOMContentLoaded', () => {
-  renderTransactions();
-  renderSavings();
-  renderGoals();
-  renderReminders();
-  getPrayerTimes();
-  
-  requestNotificationPermission();
-  
-  setInterval(checkPrayerTime, 15000);
-  setInterval(checkReminders, 10000);
-  
-  console.log('✅ التطبيق يعمل بكامل طاقته');
-});
-
-// ============ Service Worker ============
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js')
-    .then(() => console.log('✅ SW registered'))
-    .catch(err => console.log('❌ SW error:', err));
-}
-</script>
-
+        // تسجيل Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed', err));
+        }
+    </script>
 </body>
 </html>
