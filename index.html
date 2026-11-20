@@ -30,6 +30,7 @@
   --shadow: rgba(44, 24, 16, 0.1);
   --danger: #a63a3a;
   --success: #2d7a4f;
+  --purple: #6b4e9e;
 }
 
 [data-theme="dark"] {
@@ -47,6 +48,7 @@
   --shadow: rgba(0, 0, 0, 0.4);
   --danger: #d65454;
   --success: #3fa870;
+  --purple: #9b7fd4;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -70,17 +72,8 @@ body {
 
 .header-content { position: relative; z-index: 2; }
 
-.header h1 {
-  font-family: 'Reem Kufi', serif;
-  font-size: 2.5rem;
-  margin-bottom: 5px;
-}
-
-.header .subtitle {
-  font-family: 'Amiri', serif;
-  font-size: 1.1rem;
-  opacity: 0.9;
-}
+.header h1 { font-family: 'Reem Kufi', serif; font-size: 2.5rem; margin-bottom: 5px; }
+.header .subtitle { font-family: 'Amiri', serif; font-size: 1.1rem; opacity: 0.9; }
 
 .theme-toggle {
   position: absolute;
@@ -117,20 +110,22 @@ body {
 
 .nav-tab {
   flex: 1;
-  min-width: 120px;
-  padding: 12px 15px;
+  min-width: 110px;
+  padding: 12px 10px;
   background: transparent;
   border: none;
   color: var(--text-secondary);
   font-family: 'Cairo', sans-serif;
   font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
   border-radius: 10px;
   transition: all 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 .nav-tab.active {
@@ -202,6 +197,11 @@ body {
   font-family: 'Cairo', sans-serif;
 }
 
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
 .btn {
@@ -219,6 +219,17 @@ body {
 .btn-gold {
   background: linear-gradient(135deg, var(--gold), var(--gold-light));
   color: var(--accent-dark);
+}
+
+.btn-purple {
+  background: linear-gradient(135deg, var(--purple), #8a6bc4);
+  color: white;
+}
+
+.btn-small {
+  width: auto;
+  padding: 8px 15px;
+  font-size: 0.85rem;
 }
 
 .btn-install {
@@ -240,12 +251,6 @@ body {
   box-shadow: 0 8px 25px rgba(201, 169, 97, 0.4);
   z-index: 1000;
   display: none;
-  animation: slideUp 0.5s ease;
-}
-
-@keyframes slideUp {
-  from { transform: translateY(100px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
 }
 
 .summary-grid {
@@ -298,6 +303,7 @@ body {
   color: var(--danger);
   cursor: pointer;
   padding: 5px;
+  font-size: 1rem;
 }
 
 .debt-card {
@@ -375,6 +381,8 @@ body {
   justify-content: space-between;
   align-items: center;
   border-right: 4px solid var(--gold);
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .notification-banner {
@@ -386,15 +394,187 @@ body {
   text-align: center;
   font-weight: 700;
   display: none;
-  animation: slideDown 0.5s ease;
   box-shadow: 0 4px 15px rgba(201, 169, 97, 0.4);
 }
 
 .notification-banner.show { display: block; }
 
-@keyframes slideDown {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+/* ===== الحصالة ===== */
+.goal-card {
+  background: var(--bg-secondary);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-right: 5px solid var(--purple);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.goal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.goal-name {
+  font-family: 'Reem Kufi', serif;
+  font-size: 1.4rem;
+  color: var(--purple);
+}
+
+.goal-stats {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+.goal-stat {
+  background: var(--bg-card);
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+}
+
+.goal-stat strong { color: var(--text-primary); }
+
+.progress-container {
+  margin-bottom: 15px;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 14px;
+  background: var(--bg-card);
+  border-radius: 7px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple), var(--gold));
+  border-radius: 7px;
+  transition: width 0.6s ease;
+  position: relative;
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  color: var(--text-secondary);
+}
+
+.goal-completed {
+  background: linear-gradient(135deg, var(--success), #3fa870);
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 15px;
+  display: none;
+}
+
+.goal-completed.show { display: block; }
+
+.deposit-input-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.deposit-input-row .form-control { flex: 1; }
+
+.deposit-history {
+  margin-top: 12px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.deposit-item {
+  background: var(--bg-card);
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+/* ===== التنبيهات ===== */
+.reminder-card {
+  background: var(--bg-secondary);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-right: 5px solid var(--danger);
+  box-shadow: 0 2px 8px var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.reminder-info { flex: 1; }
+
+.reminder-time {
+  font-family: 'Reem Kufi', serif;
+  font-size: 1.8rem;
+  color: var(--danger);
+  margin-bottom: 5px;
+}
+
+.reminder-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.reminder-reason {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.reminder-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.reminder-toggle {
+  width: 50px;
+  height: 26px;
+  background: var(--border);
+  border-radius: 13px;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.reminder-toggle::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  top: 3px;
+  right: 3px;
+  transition: all 0.3s;
+}
+
+.reminder-toggle.on {
+  background: var(--success);
+}
+
+.reminder-toggle.on::after {
+  right: 27px;
 }
 
 @media (max-width: 768px) {
@@ -402,6 +582,7 @@ body {
   .form-row { grid-template-columns: 1fr; }
   .summary-value { font-size: 1.4rem; }
   .savings-amount { font-size: 2.2rem; }
+  .nav-tab { font-size: 0.8rem; min-width: 95px; }
 }
 
 .breakdown-item {
@@ -453,11 +634,14 @@ body {
     <button class="nav-tab" onclick="showSection('finance', this)">💰 المصاريف</button>
     <button class="nav-tab" onclick="showSection('debts', this)">📝 الديون</button>
     <button class="nav-tab" onclick="showSection('savings', this)">💎 المدخرات</button>
+    <button class="nav-tab" onclick="showSection('goals', this)">🎯 الحصالة</button>
+    <button class="nav-tab" onclick="showSection('reminders', this)">⏰ التنبيهات</button>
   </div>
 </div>
 
 <div class="main-content">
 
+  <!-- ===== الأذان ===== -->
   <div class="section active" id="prayer">
     <div class="card">
       <h2 class="card-title">🕐 مواقيت الصلاة</h2>
@@ -466,7 +650,10 @@ body {
       </div>
       <div class="location-info" id="locationInfo">
         <span>📍 جاري تحديد موقعك...</span>
-        <button class="btn btn-gold" onclick="getPrayerTimes()" style="width: auto; padding: 8px 15px;">تحديث</button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-purple btn-small" onclick="testNotification()">🔔 تجربة</button>
+          <button class="btn btn-gold btn-small" onclick="getPrayerTimes()">تحديث</button>
+        </div>
       </div>
       <div id="prayerTimesContainer">
         <div class="loading"><div class="spinner"></div></div>
@@ -475,6 +662,7 @@ body {
     </div>
   </div>
 
+  <!-- ===== المصاريف ===== -->
   <div class="section" id="finance">
     <div class="summary-grid">
       <div class="summary-card income">
@@ -541,6 +729,7 @@ body {
     </div>
   </div>
 
+  <!-- ===== الديون ===== -->
   <div class="section" id="debts">
     <div class="card">
       <h2 class="card-title">➕ تسجيل دين جديد</h2>
@@ -575,6 +764,7 @@ body {
     </div>
   </div>
 
+  <!-- ===== المدخرات ===== -->
   <div class="section" id="savings">
     <div class="savings-display">
       <div style="font-size: 1.1rem; opacity: 0.9;">إجمالي مدخراتك</div>
@@ -602,11 +792,71 @@ body {
     </div>
   </div>
 
+  <!-- ===== الحصالة ===== -->
+  <div class="section" id="goals">
+    <div class="card">
+      <h2 class="card-title">🎯 إنشاء هدف ادخار جديد</h2>
+      <form id="goalForm">
+        <div class="form-group">
+          <label>اسم الهدف</label>
+          <input type="text" class="form-control" id="goalName" required placeholder="مثال: آيفون، سفر، سيارة...">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>المبلغ المطلوب (ر.س)</label>
+            <input type="number" class="form-control" id="goalTarget" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label>عدد الأيام</label>
+            <input type="number" class="form-control" id="goalDays" min="1" required placeholder="مثال: 30">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>ملاحظة (اختياري)</label>
+          <input type="text" class="form-control" id="goalNote">
+        </div>
+        <button type="submit" class="btn btn-purple">إنشاء الهدف</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">📋 أهدافي</h2>
+      <div id="goalsList"></div>
+    </div>
+  </div>
+
+  <!-- ===== التنبيهات ===== -->
+  <div class="section" id="reminders">
+    <div class="card">
+      <h2 class="card-title">⏰ إضافة تنبيه جديد</h2>
+      <form id="reminderForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>اسم المهمة</label>
+            <input type="text" class="form-control" id="reminderTitle" required placeholder="مثال: مشاهدة المسلسل">
+          </div>
+          <div class="form-group">
+            <label>الوقت</label>
+            <input type="time" class="form-control" id="reminderTime" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>السبب / ملاحظة (يظهر في الإشعار)</label>
+          <input type="text" class="form-control" id="reminderReason" placeholder="مثال: لا أنسى الحلقة الجديدة">
+        </div>
+        <button type="submit" class="btn">إضافة التنبيه</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">📋 تنبيهاتي اليومية</h2>
+      <div id="remindersList"></div>
+    </div>
+  </div>
+
 </div>
 
-<button class="btn-install" id="installBtn" onclick="installApp()">
-  📱 تثبيت التطبيق
-</button>
+<button class="btn-install" id="installBtn" onclick="installApp()">📱 تثبيت التطبيق</button>
 
 <script>
 // ============ Theme ============
@@ -635,7 +885,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 async function installApp() {
   if (deferredPrompt) {
     deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
+    await deferredPrompt.userChoice;
     deferredPrompt = null;
     installBtn.style.display = 'none';
   } else {
@@ -643,9 +893,7 @@ async function installApp() {
   }
 }
 
-window.addEventListener('appinstalled', () => {
-  installBtn.style.display = 'none';
-});
+window.addEventListener('appinstalled', () => { installBtn.style.display = 'none'; });
 
 // ============ Navigation ============
 function showSection(id, btn) {
@@ -655,8 +903,101 @@ function showSection(id, btn) {
   btn.classList.add('active');
 }
 
+// ============ Notification System ============
+async function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    await Notification.requestPermission();
+  }
+}
+
+function playNotificationSound(type) {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    if (type === 'prayer') {
+      // صوت الصلاة: نغمة هادئة
+      const notes = [880, 1100, 880];
+      notes.forEach((freq, i) => {
+        setTimeout(() => {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+          osc.frequency.value = freq;
+          osc.type = 'sine';
+          gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+          osc.start();
+          setTimeout(() => osc.stop(), 300);
+        }, i * 300);
+      });
+    } else {
+      // صوت التنبيه: نغمة عادية
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      osc.frequency.value = 1000;
+      osc.type = 'square';
+      gain.gain.value = 0.15;
+      osc.start();
+      setTimeout(() => osc.stop(), 200);
+      setTimeout(() => {
+        const osc2 = audioContext.createOscillator();
+        const gain2 = audioContext.createGain();
+        osc2.connect(gain2);
+        gain2.connect(audioContext.destination);
+        osc2.frequency.value = 1200;
+        osc2.type = 'square';
+        gain2.gain.value = 0.15;
+        osc2.start();
+        setTimeout(() => osc2.stop(), 200);
+      }, 250);
+    }
+  } catch (e) { console.log('خطأ صوت:', e); }
+}
+
+function vibrate(pattern) {
+  if ('vibrate' in navigator) navigator.vibrate(pattern || [150, 80, 150]);
+}
+
+function showNotification(title, body, type) {
+  playNotificationSound(type);
+  vibrate(type === 'prayer' ? [200, 100, 200, 100, 200] : [150, 80, 150]);
+  
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({
+      type: 'SHOW_NOTIFICATION',
+      title: title,
+      body: body
+    });
+  }
+  
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification(title, {
+      body: body,
+      icon: 'icon.png',
+      vibrate: [150, 80, 150]
+    });
+  }
+}
+
+// زر التجربة
+function testNotification() {
+  requestNotificationPermission();
+  setTimeout(() => {
+    showNotification('🕌 وقت الصلاة', 'هذه تجربة إشعار صلاة الظهر (12:30)', 'prayer');
+    
+    const banner = document.getElementById('prayerNotification');
+    banner.textContent = '🔔 هذه تجربة إشعار! لو اشتغل، كل شي تمام ✅';
+    banner.classList.add('show');
+    setTimeout(() => banner.classList.remove('show'), 5000);
+  }, 500);
+}
+
 // ============ Prayer Times ============
 let prayerTimesData = [];
+let lastNotifiedPrayer = '';
 
 async function getPrayerTimes() {
   const container = document.getElementById('prayerTimesContainer');
@@ -671,7 +1012,7 @@ async function getPrayerTimes() {
       const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ar`);
       const geoData = await geoRes.json();
       const city = geoData.address.city || geoData.address.town || 'موقعك الحالي';
-      locationInfo.innerHTML = `<span>📍 ${city}</span><button class="btn btn-gold" onclick="getPrayerTimes()" style="width: auto; padding: 8px 15px;">تحديث</button>`;
+      locationInfo.innerHTML = `<span>📍 ${city}</span><div style="display: flex; gap: 8px;"><button class="btn btn-purple btn-small" onclick="testNotification()">🔔 تجربة</button><button class="btn btn-gold btn-small" onclick="getPrayerTimes()">تحديث</button></div>`;
       
       const today = new Date();
       const dateStr = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
@@ -714,97 +1055,8 @@ async function getPrayerTimes() {
   });
 }
 
-// ============ Prayer Notification System ============
-let lastNotifiedPrayer = '';
-
-// طلب إذن الإشعارات
-async function requestNotificationPermission() {
-  if ('Notification' in window && Notification.permission === 'default') {
-    await Notification.requestPermission();
-  }
-}
-
-// تشغيل صوت نوتيفيكيشن بسيط (beep)
-function playNotificationSound() {
-  try {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    
-    // beep أول
-    const osc1 = audioContext.createOscillator();
-    const gain1 = audioContext.createGain();
-    osc1.connect(gain1);
-    gain1.connect(audioContext.destination);
-    osc1.frequency.value = 880;
-    osc1.type = 'sine';
-    gain1.gain.value = 0.2;
-    osc1.start();
-    setTimeout(() => osc1.stop(), 200);
-    
-    // beep ثاني
-    setTimeout(() => {
-      const osc2 = audioContext.createOscillator();
-      const gain2 = audioContext.createGain();
-      osc2.connect(gain2);
-      gain2.connect(audioContext.destination);
-      osc2.frequency.value = 1100;
-      osc2.type = 'sine';
-      gain2.gain.value = 0.2;
-      osc2.start();
-      setTimeout(() => osc2.stop(), 200);
-    }, 250);
-    
-  } catch (e) {
-    console.log('خطأ في الصوت:', e);
-  }
-}
-
-// هزة خفيفة
-function vibrate() {
-  if ('vibrate' in navigator) {
-    navigator.vibrate([150, 80, 150]);
-  }
-}
-
-// إرسال الإشعار
-function sendPrayerNotification(prayerName, prayerTime) {
-  if (lastNotifiedPrayer === prayerName) return;
-  lastNotifiedPrayer = prayerName;
-  
-  // صوت
-  playNotificationSound();
-  
-  // هزة
-  vibrate();
-  
-  // إشعار من Service Worker
-  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-    navigator.serviceWorker.controller.postMessage({
-      type: 'PRAYER_NOTIFICATION',
-      prayerName: prayerName,
-      prayerTime: prayerTime
-    });
-  }
-  
-  // إشعار مباشر
-  if ('Notification' in window && Notification.permission === 'granted') {
-    new Notification('🕌 وقت الصلاة', {
-      body: `حان الآن وقت صلاة ${prayerName} (${prayerTime})`,
-      icon: 'icon.png',
-      vibrate: [150, 80, 150]
-    });
-  }
-  
-  // بانر داخل التطبيق
-  const banner = document.getElementById('prayerNotification');
-  banner.textContent = `🔔 حان الآن وقت صلاة ${prayerName} (${prayerTime})`;
-  banner.classList.add('show');
-  setTimeout(() => banner.classList.remove('show'), 10000);
-}
-
-// فحص وقت الصلاة
 function checkPrayerTime() {
   if (prayerTimesData.length === 0) return;
-  
   const now = new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
   const currentSeconds = now.getSeconds();
@@ -814,35 +1066,16 @@ function checkPrayerTime() {
     const prayerMinutes = h * 60 + m;
     const diff = prayerMinutes - currentMinutes;
     
-    // عند وقت الأذان بالضبط (أول 30 ثانية)
-    if (diff === 0 && currentSeconds < 30) {
-      sendPrayerNotification(p.name, p.time);
-    }
-    
-    // تنبيه خفيف قبل دقيقة (هزة وحدة بس)
-    if (diff === 1 && currentSeconds < 10 && lastNotifiedPrayer !== p.name + '_early') {
-      lastNotifiedPrayer = p.name + '_early';
-      if ('vibrate' in navigator) {
-        navigator.vibrate(100);
-      }
+    if (diff === 0 && currentSeconds < 30 && lastNotifiedPrayer !== p.name) {
+      lastNotifiedPrayer = p.name;
+      showNotification('🕌 وقت الصلاة', `حان الآن وقت صلاة ${p.name} (${p.time})`, 'prayer');
+      
+      const banner = document.getElementById('prayerNotification');
+      banner.textContent = `🔔 حان الآن وقت صلاة ${p.name} (${p.time})`;
+      banner.classList.add('show');
+      setTimeout(() => banner.classList.remove('show'), 10000);
     }
   });
-  
-  // إعادة تعيين التنبيه المبكر بعد مرور الدقيقة
-  if (currentSeconds === 0) {
-    prayerTimesData.forEach(p => {
-      if (lastNotifiedPrayer === p.name + '_early') {
-        lastNotifiedPrayer = lastNotifiedPrayer.replace('_early', '');
-      }
-    });
-  }
-}
-
-// بدء نظام الإشعارات
-function startPrayerChecker() {
-  requestNotificationPermission();
-  setInterval(checkPrayerTime, 15000); // فحص كل 15 ثانية
-  console.log('✅ نظام إشعارات الصلاة مفعّل');
 }
 
 // ============ Transactions ============
@@ -1027,23 +1260,252 @@ function renderSavings() {
   `).join('');
 }
 
+// ============ Goals (الحصالة) ============
+let goals = JSON.parse(localStorage.getItem('goals') || '[]');
+
+document.getElementById('goalForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('goalName').value.trim();
+  const target = parseFloat(document.getElementById('goalTarget').value);
+  const days = parseInt(document.getElementById('goalDays').value);
+  const note = document.getElementById('goalNote').value;
+  
+  const startDate = new Date();
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() + days);
+  
+  goals.push({
+    id: Date.now(),
+    name,
+    target,
+    days,
+    note,
+    startDate: startDate.toISOString().split('T')[0],
+    endDate: endDate.toISOString().split('T')[0],
+    deposits: []
+  });
+  
+  localStorage.setItem('goals', JSON.stringify(goals));
+  renderGoals();
+  e.target.reset();
+});
+
+function depositToGoal(goalId) {
+  const input = document.getElementById('deposit-' + goalId);
+  const amount = parseFloat(input.value);
+  
+  if (!amount || amount <= 0) {
+    alert('أدخل مبلغ صحيح');
+    return;
+  }
+  
+  const goal = goals.find(g => g.id === goalId);
+  goal.deposits.unshift({
+    id: Date.now(),
+    amount,
+    date: new Date().toISOString().split('T')[0]
+  });
+  
+  localStorage.setItem('goals', JSON.stringify(goals));
+  
+  const current = goal.deposits.reduce((sum, d) => sum + d.amount, 0);
+  if (current >= goal.target) {
+    showNotification('🎉 مبروك!', `لقد حققت هدف "${goal.name}" بالكامل!`, 'prayer');
+  }
+  
+  renderGoals();
+}
+
+function deleteGoalDeposit(goalId, depositId) {
+  if (confirm('حذف الإيداع؟')) {
+    const goal = goals.find(g => g.id === goalId);
+    goal.deposits = goal.deposits.filter(d => d.id !== depositId);
+    localStorage.setItem('goals', JSON.stringify(goals));
+    renderGoals();
+  }
+}
+
+function deleteGoal(goalId) {
+  if (confirm('حذف الهدف بالكامل؟')) {
+    goals = goals.filter(g => g.id !== goalId);
+    localStorage.setItem('goals', JSON.stringify(goals));
+    renderGoals();
+  }
+}
+
+function renderGoals() {
+  const list = document.getElementById('goalsList');
+  if (goals.length === 0) {
+    list.innerHTML = '<div class="empty-state">🎯 لا توجد أهداف بعد<br>أنشئ أول هدف ادخار!</div>';
+    return;
+  }
+  
+  list.innerHTML = goals.map(g => {
+    const current = g.deposits.reduce((sum, d) => sum + d.amount, 0);
+    const percent = Math.min((current / g.target) * 100, 100);
+    const remaining = Math.max(g.target - current, 0);
+    
+    // حساب الأيام المتبقية
+    const today = new Date();
+    const end = new Date(g.endDate);
+    const daysLeft = Math.max(Math.ceil((end - today) / (1000 * 60 * 60 * 24)), 0);
+    const dailyNeed = daysLeft > 0 ? (remaining / daysLeft) : remaining;
+    
+    const completed = current >= g.target;
+    
+    return `
+      <div class="goal-card">
+        <div class="goal-header">
+          <div class="goal-name">🎯 ${g.name}</div>
+          <button class="delete-btn" onclick="deleteGoal(${g.id})">🗑️</button>
+        </div>
+        ${g.note ? `<div style="color: var(--text-secondary); margin-bottom: 10px; font-size: 0.9rem;">${g.note}</div>` : ''}
+        <div class="goal-completed ${completed ? 'show' : ''}">🎉 تم تحقيق الهدف! مبروك</div>
+        <div class="goal-stats">
+          <div class="goal-stat">الهدف: <strong>${g.target.toFixed(2)} ر.س</strong></div>
+          <div class="goal-stat">المدخر: <strong style="color: var(--purple);">${current.toFixed(2)} ر.س</strong></div>
+          <div class="goal-stat">المتبقي: <strong style="color: var(--danger);">${remaining.toFixed(2)} ر.س</strong></div>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: ${percent}%"></div>
+          </div>
+          <div class="progress-text">
+            <span>${percent.toFixed(0)}% مكتمل</span>
+            <span>⏳ ${daysLeft} يوم متبقي</span>
+          </div>
+        </div>
+        ${!completed ? `
+          <div class="goal-stat" style="margin-bottom: 10px;">
+            💡 تحتاج ادخار <strong style="color: var(--accent);">${dailyNeed.toFixed(2)} ر.س</strong> يومياً
+          </div>
+          <div class="deposit-input-row">
+            <input type="number" class="form-control" id="deposit-${g.id}" step="0.01" placeholder="أدخل المبلغ">
+            <button class="btn btn-purple" style="width: auto; padding: 12px 20px;" onclick="depositToGoal(${g.id})">💰 إيداع</button>
+          </div>
+        ` : ''}
+        ${g.deposits.length > 0 ? `
+          <div class="deposit-history">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.9rem;">📝 سجل الإيداعات:</div>
+            ${g.deposits.slice(0, 5).map(d => `
+              <div class="deposit-item">
+                <span>💰 ${d.amount.toFixed(2)} ر.س • ${d.date}</span>
+                <button class="delete-btn" style="font-size: 0.8rem;" onclick="deleteGoalDeposit(${g.id}, ${d.id})">🗑️</button>
+              </div>
+            `).join('')}
+            ${g.deposits.length > 5 ? `<div style="font-size: 0.8rem; color: var(--text-secondary); text-align: center;">+${g.deposits.length - 5} إيداع آخر</div>` : ''}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+// ============ Reminders (التنبيهات) ============
+let reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
+let lastReminderTriggered = {};
+
+document.getElementById('reminderForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  reminders.push({
+    id: Date.now(),
+    title: document.getElementById('reminderTitle').value.trim(),
+    time: document.getElementById('reminderTime').value,
+    reason: document.getElementById('reminderReason').value,
+    active: true
+  });
+  localStorage.setItem('reminders', JSON.stringify(reminders));
+  renderReminders();
+  e.target.reset();
+});
+
+function toggleReminder(id) {
+  const r = reminders.find(x => x.id === id);
+  r.active = !r.active;
+  localStorage.setItem('reminders', JSON.stringify(reminders));
+  renderReminders();
+}
+
+function deleteReminder(id) {
+  if (confirm('حذف التنبيه؟')) {
+    reminders = reminders.filter(r => r.id !== id);
+    localStorage.setItem('reminders', JSON.stringify(reminders));
+    renderReminders();
+  }
+}
+
+function checkReminders() {
+  const now = new Date();
+  const currentHM = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const currentSec = now.getSeconds();
+  const todayKey = now.toISOString().split('T')[0];
+  
+  reminders.forEach(r => {
+    if (!r.active) return;
+    if (r.time === currentHM && currentSec < 30) {
+      const key = r.id + '-' + todayKey;
+      if (lastReminderTriggered[key]) return;
+      lastReminderTriggered[key] = true;
+      
+      const body = r.reason ? `${r.reason}` : `لا تنسى: ${r.title}`;
+      showNotification(`⏰ تذكير: ${r.title}`, body, 'reminder');
+      
+      // بانر داخل التطبيق
+      const banner = document.getElementById('prayerNotification');
+      banner.textContent = `⏰ تذكير: ${r.title} - ${r.reason || 'لا تنسى!'}`;
+      banner.classList.add('show');
+      setTimeout(() => banner.classList.remove('show'), 15000);
+    }
+  });
+}
+
+function renderReminders() {
+  const list = document.getElementById('remindersList');
+  if (reminders.length === 0) {
+    list.innerHTML = '<div class="empty-state">⏰ لا توجد تنبيهات<br>أضف أول تنبيه!</div>';
+    return;
+  }
+  
+  list.innerHTML = reminders.map(r => `
+    <div class="reminder-card">
+      <div class="reminder-info">
+        <div class="reminder-time">🕐 ${r.time}</div>
+        <div class="reminder-title">${r.title}</div>
+        ${r.reason ? `<div class="reminder-reason">📝 ${r.reason}</div>` : ''}
+      </div>
+      <div class="reminder-actions">
+        <button class="reminder-toggle ${r.active ? 'on' : ''}" onclick="toggleReminder(${r.id})"></button>
+        <button class="delete-btn" onclick="deleteReminder(${r.id})">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
 // ============ Initialize ============
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('debtDate').value = new Date().toISOString().split('T')[0];
   renderTransactions();
   renderDebts();
   renderSavings();
+  renderGoals();
+  renderReminders();
   getPrayerTimes();
   
-  // بدء نظام إشعارات الصلاة بعد 3 ثواني
-  setTimeout(startPrayerChecker, 3000);
+  requestNotificationPermission();
+  
+  // فحص الصلاة كل 15 ثانية
+  setInterval(checkPrayerTime, 15000);
+  // فحص التنبيهات كل 10 ثواني
+  setInterval(checkReminders, 10000);
+  
+  console.log('✅ التطبيق يعمل بكامل طاقته');
 });
 
 // ============ Service Worker ============
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js')
-    .then(reg => console.log('✅ Service Worker registered'))
-    .catch(err => console.log('❌ Service Worker error:', err));
+    .then(() => console.log('✅ SW registered'))
+    .catch(err => console.log('❌ SW error:', err));
 }
 </script>
 
