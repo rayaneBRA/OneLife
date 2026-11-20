@@ -1,8 +1,9 @@
 {
   "name": "حياتي - تطبيقك الشخصي",
   "short_name": "حياتي",
-  "description": "تطبيق إدارة المصاريف والديون والمدخرات",
-  "start_url": "/",
+  "description": "تطبيق إدارة المصاريف والديون والمدخرات ومواقيت الصلاة",
+  "start_url": "/OneLife/",
+  "scope": "/OneLife/",
   "display": "standalone",
   "background_color": "#084d38",
   "theme_color": "#084d38",
