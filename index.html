@@ -306,35 +306,6 @@ body {
   font-size: 1rem;
 }
 
-.debt-card {
-  background: var(--bg-secondary);
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  border-right: 5px solid var(--gold);
-}
-
-.debt-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px dashed var(--border);
-}
-
-.debt-person { font-family: 'Reem Kufi', serif; font-size: 1.3rem; color: var(--accent); }
-.debt-amount { font-size: 1.5rem; font-weight: 700; color: var(--gold); }
-
-.debt-entry {
-  background: var(--bg-card);
-  padding: 10px 15px;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .savings-display {
   text-align: center;
   padding: 30px;
@@ -630,7 +601,6 @@ body {
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('prayer', this)">🕌 الأذان</button>
     <button class="nav-tab" onclick="showSection('finance', this)">💰 المصاريف</button>
-    <button class="nav-tab" onclick="showSection('debts', this)">📝 الديون</button>
     <button class="nav-tab" onclick="showSection('savings', this)">💎 المدخرات</button>
     <button class="nav-tab" onclick="showSection('goals', this)">🎯 الحصالة</button>
     <button class="nav-tab" onclick="showSection('reminders', this)">⏰ التنبيهات</button>
@@ -722,41 +692,6 @@ body {
     <div class="card">
       <h2 class="card-title">📋 سجل المعاملات</h2>
       <div id="transactionList"></div>
-    </div>
-  </div>
-
-  <!-- الديون -->
-  <div class="section" id="debts">
-    <div class="card">
-      <h2 class="card-title">➕ تسجيل دين جديد</h2>
-      <form id="debtForm">
-        <div class="form-row">
-          <div class="form-group">
-            <label>اسم الشخص</label>
-            <input type="text" class="form-control" id="debtPerson" required>
-          </div>
-          <div class="form-group">
-            <label>المبلغ (دج)</label>
-            <input type="number" class="form-control" id="debtAmount" step="0.01" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>التاريخ</label>
-            <input type="date" class="form-control" id="debtDate" required>
-          </div>
-          <div class="form-group">
-            <label>ملاحظة</label>
-            <input type="text" class="form-control" id="debtNote">
-          </div>
-        </div>
-        <button type="submit" class="btn">تسجيل الدين</button>
-      </form>
-    </div>
-
-    <div class="card">
-      <h2 class="card-title">👥 سجل الديون</h2>
-      <div id="debtsList"></div>
     </div>
   </div>
 
@@ -1147,66 +1082,6 @@ function renderTransactions() {
   `).join('');
 }
 
-// ============ Debts ============
-let debts = JSON.parse(localStorage.getItem('debts') || '[]');
-
-document.getElementById('debtForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const person = document.getElementById('debtPerson').value.trim();
-  const amount = parseFloat(document.getElementById('debtAmount').value);
-  const date = document.getElementById('debtDate').value;
-  const note = document.getElementById('debtNote').value;
-  
-  let existing = debts.find(d => d.person === person);
-  if (existing) {
-    existing.entries.push({ amount, date, note, id: Date.now() });
-    existing.total = existing.entries.reduce((sum, e) => sum + e.amount, 0);
-  } else {
-    debts.push({ person, entries: [{ amount, date, note, id: Date.now() }], total: amount });
-  }
-  
-  localStorage.setItem('debts', JSON.stringify(debts));
-  renderDebts();
-  e.target.reset();
-  document.getElementById('debtDate').value = new Date().toISOString().split('T')[0];
-});
-
-function deleteDebtEntry(person, entryId) {
-  if (confirm('حذف؟')) {
-    const debt = debts.find(d => d.person === person);
-    debt.entries = debt.entries.filter(e => e.id !== entryId);
-    if (debt.entries.length === 0) debts = debts.filter(d => d.person !== person);
-    else debt.total = debt.entries.reduce((sum, e) => sum + e.amount, 0);
-    localStorage.setItem('debts', JSON.stringify(debts));
-    renderDebts();
-  }
-}
-
-function renderDebts() {
-  const list = document.getElementById('debtsList');
-  if (debts.length === 0) {
-    list.innerHTML = '<div class="empty-state">لا توجد ديون</div>';
-    return;
-  }
-  list.innerHTML = debts.map(d => `
-    <div class="debt-card">
-      <div class="debt-header">
-        <div class="debt-person">👤 ${d.person}</div>
-        <div class="debt-amount">${d.total.toFixed(2)} دج</div>
-      </div>
-      ${d.entries.map(e => `
-        <div class="debt-entry">
-          <div>
-            <div style="font-weight: 600;">${e.amount.toFixed(2)} دج</div>
-            <div style="color: var(--text-secondary); font-size: 0.85rem;">${e.date}${e.note ? ' • ' + e.note : ''}</div>
-          </div>
-          <button class="delete-btn" onclick="deleteDebtEntry('${d.person}', ${e.id})">🗑️</button>
-        </div>
-      `).join('')}
-    </div>
-  `).join('');
-}
-
 // ============ Savings ============
 let savings = JSON.parse(localStorage.getItem('savings') || '[]');
 
@@ -1471,9 +1346,7 @@ function renderReminders() {
 
 // ============ Initialize ============
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('debtDate').value = new Date().toISOString().split('T')[0];
   renderTransactions();
-  renderDebts();
   renderSavings();
   renderGoals();
   renderReminders();
