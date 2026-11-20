@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حياتي - تطبيقك الشخصي</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #f5f1e8;
+  --bg-secondary: #ffffff;
+  --bg-card: #fffdf7;
+  --text-primary: #2c1810;
+  --text-secondary: #5a4632;
+  --accent: #0d6b4e;
+  --accent-light: #1a8f6a;
+  --accent-dark: #084d38;
+  --gold: #c9a961;
+  --gold-light: #e0c987;
+  --border: #d4c5a0;
+  --shadow: rgba(44, 24, 16, 0.1);
+  --danger: #a63a3a;
+  --success: #2d7a4f;
+  --warning: #b8860b;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0f1419;
+  --bg-secondary: #1a2332;
+  --bg-card: #1e2a3a;
+  --text-primary: #e8dcc4;
+  --text-secondary: #b8a88a;
+  --accent: #2d9d78;
+  --accent-light: #3fb892;
+  --accent-dark: #1f7a5c;
+  --gold: #d4b876;
+  --gold-light: #e8d09a;
+  --border: #2d3a4d;
+  --shadow: rgba(0, 0, 0, 0.4);
+  --danger: #d65454;
+  --success: #3fa870;
+  --warning: #d4a017;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  transition: all 0.4s ease;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(13, 107, 78, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(201, 169, 97, 0.08) 0%, transparent 50%);
+}
+
+[data-theme="dark"] body {
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(45, 157, 120, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(212, 184, 118, 0.05) 0%, transparent 50%);
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  color: var(--gold-light);
+  padding: 25px 20px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px var(--shadow);
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z' fill='none' stroke='%23c9a961' stroke-width='0.3' opacity='0.15'/%3E%3C/svg%3E");
+  background-size: 80px 80px;
+  opacity: 0.4;
+}
+
+.header-content { position: relative; z-index: 2; }
+
+.header h1 {
+  font-family: 'Reem Kufi', serif;
+  font-size: 2.5rem;
+  margin-bottom: 5px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.header .subtitle {
+  font-family: 'Amiri', serif;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  font-style: italic;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.3rem;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+  z-index: 3;
+}
+
+.theme-toggle:hover {
+  background: var(--gold);
+  color: var(--accent-dark);
+  transform: rotate(20deg);
+}
+
+/* Navigation */
+.nav-container {
+  max-width: 1200px;
+  margin: -40px auto 0;
+  padding: 0 15px;
+  position: relative;
+  z-index: 10;
+}
+
+.nav-tabs {
+  display: flex;
+  background: var(--bg-secondary);
+  border-radius: 15px;
+  padding: 8px;
+  box-shadow: 0 8px 25px var(--shadow);
+  gap: 5px;
+  overflow-x: auto;
+}
+
+.nav-tab {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 15px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: 'Cairo', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.nav-tab:hover {
+  background: var(--bg-card);
+  color: var(--accent);
+}
+
+.nav-tab.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: white;
+  box-shadow: 0 4px 12px rgba(13, 107, 78, 0.3);
+}
+
+.nav-tab svg { width: 20px; height: 20px; }
+
+/* Main Content */
+.main-content {
+  max-width: 1200px;
+  margin: 25px auto;
+  padding: 0 15px 40px;
+}
+
+.section { display: none; animation: fadeIn 0.5s ease; }
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px var(--shadow);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 100px; height: 100px;
+  background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+  opacity: 0.1;
+}
+
+.card-title {
+  font-family: 'Reem Kufi', serif;
+  font-size: 1.5rem;
+  color: var(--accent);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.card-title svg { width: 28px; height: 28px; color: var(--gold); }
+
+/* Prayer Times */
+.prayer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.prayer-card {
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+  padding: 20px 15px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid var(--border);
+  transition: all 0.3s;
+  position: relative;
+}
+
+.prayer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px var(--shadow);
+  border-color: var(--gold);
+}
+
+.prayer-card.next {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: white;
+  border-color: var(--gold);
+}
+
+.prayer-card.next .prayer-name,
+.prayer-card.next .prayer-time { color: white; }
+
+.prayer-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  color: var(--gold);
+}
+
+.prayer-card.next .prayer-icon { color: var(--gold-light); }
+
+.prayer-name {
+  font-family: 'Reem Kufi', serif;
+  font-size: 1.2rem;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+
+.prayer-time {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.location-info {
+  background: var(--bg-secondary);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-right: 4px solid var(--gold);
+}
+
+.location-info span { color: var(--text-secondary); font-size: 0.9rem; }
+
+/* Forms */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 15px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: 'Cairo', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(13, 107, 78, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.btn {
+  padding: 12px 25px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Cairo', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(13, 107, 78, 0.2);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(13, 107, 78, 0.3);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--danger), #c44);
+  box-shadow: 0 4px 12px rgba(166, 58, 58, 0.2);
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--accent-dark);
+}
+
+.btn-block { width: 100%; justify-content: center; }
+
+/* Summary Cards */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.summary-card {
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+  padding: 20px;
+  border-radius: 12px;
+  border-right: 4px solid var(--accent);
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-card.income { border-color: var(--success); }
+.summary-card.expense { border-color: var(--danger); }
+.summary-card.balance { border-color: var(--gold); }
+.summary-card.savings { border-color: var(--accent); }
+
+.summary-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.summary-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: 'Reem Kufi', serif;
+}
+
+.summary-card.income .summary-value { color: var(--success); }
+.summary-card.expense .summary-value { color: var(--danger); }
+.summary-card.balance .summary-value { color: var(--gold); }
+
+/* Transaction List */
+.transaction-list {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.transaction-item {
+  background: var(--bg-secondary);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-right: 4px solid var(--border);
+  transition: all 0.3s;
+}
+
+.transaction-item:hover {
+  transform: translateX(-5px);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.transaction-item.income { border-color: var(--success); }
+.transaction-item.expense { border-color: var(--danger); }
+
+.transaction-info h4 {
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.transaction-info .meta {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.transaction-amount {
+  font-weight: 700;
+  font-size: 1.1rem;
+  font-family: 'Reem Kufi', serif;
+}
+
+.transaction-item.income .transaction-amount { color: var(--success); }
+.transaction-item.expense .transaction-amount { color: var(--danger); }
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  transition: all 0.2s;
+  margin-right: 10px;
+}
+
+.delete-btn:hover { background: rgba(166, 58, 58, 0.1); }
+
+/* Category Tags */
+.category-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  background: var(--accent);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Debt Cards */
+.debt-card {
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border-right: 5px solid var(--gold);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.debt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.debt-person {
+  font-family: 'Reem Kufi', serif;
+  font-size: 1.3rem;
+  color: var(--accent);
+}
+
+.debt-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gold);
+  font-family: 'Reem Kufi', serif;
+}
+
+.debt-entries {
+  margin-top: 10px;
+}
+
+.debt-entry {
+  background: var(--bg-card);
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.debt-entry .date { color: var(--text-secondary); font-size: 0.85rem; }
+
+/* Savings */
+.savings-display {
+  text-align: center;
+  padding: 30px;
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  color: white;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.savings-display::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(201, 169, 97, 0.2) 0%, transparent 50%);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.savings-amount {
+  font-size: 3rem;
+  font-weight: 700;
+  font-family: 'Reem Kufi', serif;
+  position: relative;
+  z-index: 2;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.savings-label {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  position: relative;
+  z-index: 2;
+  margin-top: 5px;
+}
+
+/* Category Breakdown */
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.breakdown-item:last-child { border-bottom: none; }
+
+.breakdown-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  margin: 0 15px;
+  overflow: hidden;
+}
+
+.breakdown-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  border-radius: 4px;
+  transition: width 0.5s;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+
+.empty-state svg {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header h1 { font-size: 1.8rem; }
+  .nav-tab { min-width: 100px; font-size: 0.85rem; padding: 10px; }
+  .nav-tab svg { width: 16px; height: 16px; }
+  .form-row { grid-template-columns: 1fr; }
+  .summary-value { font-size: 1.4rem; }
+  .savings-amount { font-size: 2.2rem; }
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-secondary);
+}
+
+.spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Quote */
+.islamic-quote {
+  font-family: 'Amiri', serif;
+  text-align: center;
+  padding: 15px;
+  color: var(--gold);
+  font-size: 1.1rem;
+  font-style: italic;
+  margin-top: 15px;
+  border-top: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  <div class="header-content">
+    <h1>✦ حياتي ✦</h1>
+    <div class="subtitle">بسم الله الرحمن الرحيم</div>
+  </div>
+</div>
+
+<div class="nav-container">
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('prayer', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>
+      الأذان
+    </button>
+    <button class="nav-tab" onclick="showSection('finance', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      المصاريف
+    </button>
+    <button class="nav-tab" onclick="showSection('debts', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/><circle cx="9" cy="7" r="4"/></svg>
+      الديون
+    </button>
+    <button class="nav-tab" onclick="showSection('savings', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2"/><circle cx="14" cy="11" r="1"/></svg>
+      المدخرات
+    </button>
+  </div>
+</div>
+
+<div class="main-content">
+
+  <!-- Prayer Times Section -->
+  <div class="section active" id="prayer">
+    <div class="card">
+      <h2 class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        مواقيت الصلاة
+      </h2>
+      <div class="location-info" id="locationInfo">
+        <span>📍 جاري تحديد موقعك...</span>
+        <button class="btn btn-gold" onclick="getPrayerTimes()" style="padding: 8px 15px; font-size: 0.85rem;">تحديث</button>
+      </div>
+      <div id="prayerTimesContainer">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p style="margin-top: 15px;">جاري تحميل المواقيت...</p>
+        </div>
+      </div>
+      <div class="islamic-quote">
+        "إن الصلاة كانت على المؤمنين كتاباً موقوتاً"
+      </div>
+    </div>
+  </div>
+
+  <!-- Finance Section -->
+  <div class="section" id="finance">
+    <div class="summary-grid">
+      <div class="summary-card income">
+        <div class="summary-label">إجمالي الدخل</div>
+        <div class="summary-value" id="totalIncome">0 ر.س</div>
+      </div>
+      <div class="summary-card expense">
+        <div class="summary-label">إجمالي المصروف</div>
+        <div class="summary-value" id="totalExpense">0 ر.س</div>
+      </div>
+      <div class="summary-card balance">
+        <div class="summary-label">الرصيد المتبقي</div>
+        <div class="summary-value" id="balance">0 ر.س</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        إضافة معاملة جديدة
+      </h2>
+      <form id="transactionForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>النوع</label>
+            <select class="form-control" id="transType" required>
+              <option value="income">دخل ✅</option>
+              <option value="expense">مصروف ❌</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>المبلغ (ر.س)</label>
+            <input type="number" class="form-control" id="transAmount" step="0.01" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>التصنيف</label>
+          <select class="form-control" id="transCategory" required>
+            <option value="راتب">راتب</option>
+            <option value="نقل">نقل</option>
+            <option value="سناكس">سناكس</option>
+            <option value="قهوة">قهوة</option>
+            <option value="غداء">غداء</option>
+            <option value="عشاء">عشاء</option>
+            <option value="تسوق">تسوق</option>
+            <option value="فواتير">فواتير</option>
+            <option value="ترفيه">ترفيه</option>
+            <option value="أخرى">أخرى</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>ملاحظة (اختياري)</label>
+          <input type="text" class="form-control" id="transNote" placeholder="مثال: غداء مع الأصدقاء">
+        </div>
+        <button type="submit" class="btn btn-block">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          إضافة
+        </button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        توزيع المصروفات حسب التصنيف
+      </h2>
+      <div id="categoryBreakdown"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
+        سجل المعاملات
+      </h2>
+      <div class="transaction-list" id="transactionList"></div>
+    </div>
+  </div>
+
+  <!-- Debts Section -->
+  <div class="section" id="debts">
+    <div class="card">
+      <h2 class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        تسجيل دين جديد
+      </h2>
+      <form id="debtForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>اسم الشخص</label>
+            <input type="text" class="form-control" id="debtPerson" required placeholder="مثال: أحمد">
+          </div>
+          <div class="form-group">
+            <label>المبلغ (ر.س)</label>
+            <input type="number" class="form-control" id="debtAmount" step="0.01" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>التاريخ</label>
+            <input type="date" class="form-control" id="debtDate" required>
+          </div>
+          <div class="form-group">
+            <label>ملاحظة</label>
+            <input type="text" class="form-control" id="debtNote" placeholder="السبب (اختياري)">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-block">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          تسجيل الدين
+        </button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        سجل الديون
+      </h2>
+      <div id="debtsList"></div>
+    </div>
+  </div>
+
+  <!-- Savings Section -->
+  <div class="section" id="savings">
+    <div class="savings-display">
+      <div class="savings-label">إجمالي مدخراتك</div>
+      <div class="savings-amount" id="totalSavings">0 ر.س</div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        إضافة مبلغ للمدخرات
+      </h2>
+      <form id="savingsForm">
+        <div class="form-group">
+          <label>المبلغ (ر.س)</label>
+          <input type="number" class="form-control" id="savingAmount" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label>ملاحظة (اختياري)</label>
+          <input type="text" class="form-control" id="savingNote" placeholder="مثال: ادخار شهري">
+        </div>
+        <button type="submit" class="btn btn-block btn-gold">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+          إضافة للمدخرات
+        </button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
+        سجل المدخرات
+      </h2>
+      <div id="savingsList"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============ Theme Toggle ============
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const newTheme = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  document.getElementById('themeBtn').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.getElementById('themeBtn').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+// ============ Navigation ============
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ============ Prayer Times ============
+async function getPrayerTimes() {
+  const container = document.getElementById('prayerTimesContainer');
+  const locationInfo = document.getElementById('locationInfo');
+  
+  container.innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top: 15px;">جاري تحديد موقعك...</p></div>';
+  
+  if (!navigator.geolocation) {
+    container.innerHTML = '<p style="text-align:center; color: var(--danger);">المتصفح لا يدعم تحديد الموقع</p>';
+    return;
+  }
+  
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude.toFixed(4);
+    const lon = pos.coords.longitude.toFixed(4);
+    
+    try {
+      // Get reverse geocoding for city name
+      const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ar`);
+      const geoData = await geoRes.json();
+      const city = geoData.address.city || geoData.address.town || geoData.address.village || 'موقعك الحالي';
+      const country = geoData.address.country || '';
+      
+      locationInfo.innerHTML = `<span>📍 ${city}${country ? '، ' + country : ''}</span><button class="btn btn-gold" onclick="getPrayerTimes()" style="padding: 8px 15px; font-size: 0.85rem;">تحديث</button>`;
+      
+      // Get prayer times
+      const today = new Date();
+      const dateStr = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
+      const res = await fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${lat}&longitude=${lon}&method=4`);
+      const data = await res.json();
+      const timings = data.data.timings;
+      
+      const prayers = [
+        { name: 'الفجر', time: timings.Fajr, icon: '🌅' },
+        { name: 'الشروق', time: timings.Sunrise, icon: '☀️' },
+        { name: 'الظهر', time: timings.Dhuhr, icon: '🌞' },
+        { name: 'العصر', time: timings.Asr, icon: '🌤️' },
+        { name: 'المغرب', time: timings.Maghrib, icon: '🌇' },
+        { name: 'العشاء', time: timings.Isha, icon: '🌙' }
+      ];
+      
+      // Find next prayer
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      let nextIdx = -1;
+      for (let i = 0; i < prayers.length; i++) {
+        const [h, m] = prayers[i].time.split(':').map(Number);
+        if (h * 60 + m > currentMinutes) {
+          nextIdx = i;
+          break;
+        }
+      }
+      
+      let html = '<div class="prayer-grid">';
+      prayers.forEach((p, i) => {
+        html += `
+          <div class="prayer-card ${i === nextIdx ? 'next' : ''}">
+            <div class="prayer-icon">${p.icon}</div>
+            <div class="prayer-name">${p.name}</div>
+            <div class="prayer-time">${p.time}</div>
+            ${i === nextIdx ? '<div style="font-size:0.75rem; margin-top:5px; opacity:0.9;">الصلاة القادمة</div>' : ''}
+          </div>
+        `;
+      });
+      html += '</div>';
+      
+      container.innerHTML = html;
+    } catch (err) {
+      container.innerHTML = '<p style="text-align:center; color: var(--danger);">حدث خطأ في تحميل المواقيت</p>';
+      console.error(err);
+    }
+  }, (err) => {
+    container.innerHTML = '<p style="text-align:center; color: var(--danger);">يرجى السماح بالوصول للموقع لاستخدام هذه الميزة</p>';
+  });
+}
+
+// ============ Transactions ============
+let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+
+function saveTransactions() {
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
+document.getElementById('transactionForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const trans = {
+    id: Date.now(),
+    type: document.getElementById('transType').value,
+    amount: parseFloat(document.getElementById('transAmount').value),
+    category: document.getElementById('transCategory').value,
+    date: new Date().toISOString().split('T')[0],
+    note: document.getElementById('transNote').value
+  };
+  transactions.unshift(trans);
+  saveTransactions();
+  renderTransactions();
+  e.target.reset();
+});
+
+function deleteTransaction(id) {
+  if (confirm('هل تريد حذف هذه المعاملة؟')) {
+    transactions = transactions.filter(t => t.id !== id);
+    saveTransactions();
+    renderTransactions();
+  }
+}
+
+function renderTransactions() {
+  const list = document.getElementById('transactionList');
+  let totalIncome = 0, totalExpense = 0;
+  const categoryTotals = {};
+  
+  transactions.forEach(t => {
+    if (t.type === 'income') totalIncome += t.amount;
+    else {
+      totalExpense += t.amount;
+      categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
+    }
+  });
+  
+  document.getElementById('totalIncome').textContent = totalIncome.toFixed(2) + ' ر.س';
+  document.getElementById('totalExpense').textContent = totalExpense.toFixed(2) + ' ر.س';
+  document.getElementById('balance').textContent = (totalIncome - totalExpense).toFixed(2) + ' ر.س';
+  
+  // Category breakdown
+  const breakdown = document.getElementById('categoryBreakdown');
+  if (Object.keys(categoryTotals).length === 0) {
+    breakdown.innerHTML = '<div class="empty-state"><p>لا توجد مصروفات بعد</p></div>';
+  } else {
+    const maxVal = Math.max(...Object.values(categoryTotals));
+    let html = '';
+    Object.entries(categoryTotals).sort((a,b) => b[1]-a[1]).forEach(([cat, val]) => {
+      const percent = (val / maxVal) * 100;
+      html += `
+        <div class="breakdown-item">
+          <span style="min-width: 80px; font-weight: 600;">${cat}</span>
+          <div class="breakdown-bar"><div class="breakdown-fill" style="width: ${percent}%"></div></div>
+          <span style="min-width: 100px; text-align: left; color: var(--danger); font-weight: 700;">${val.toFixed(2)} ر.س</span>
+        </div>
+      `;
+    });
+    breakdown.innerHTML = html;
+  }
+  
+  // Transactions list
+  if (transactions.length === 0) {
+    list.innerHTML = '<div class="empty-state"><p>لا توجد معاملات بعد</p></div>';
+    return;
+  }
+  
+  list.innerHTML = transactions.map(t => `
+    <div class="transaction-item ${t.type}">
+      <div style="display: flex; align-items: center; flex: 1;">
+        <button class="delete-btn" onclick="deleteTransaction(${t.id})">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+        </button>
+        <div class="transaction-info">
+          <h4>${t.category} ${t.note ? '- ' + t.note : ''}</h4>
+          <div class="meta">
+            <span>📅 ${t.date}</span>
+            <span class="category-tag">${t.type === 'income' ? 'دخل' : 'مصروف'}</span>
+          </div>
+        </div>
+      </div>
+      <div class="transaction-amount">${t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)} ر.س</div>
+    </div>
+  `).join('');
+}
+
+// ============ Debts ============
+let debts = JSON.parse(localStorage.getItem('debts') || '[]');
+
+function saveDebts() {
+  localStorage.setItem('debts', JSON.stringify(debts));
+}
+
+document.getElementById('debtForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const person = document.getElementById('debtPerson').value.trim();
+  const amount = parseFloat(document.getElementById('debtAmount').value);
+  const date = document.getElementById('debtDate').value;
+  const note = document.getElementById('debtNote').value;
+  
+  // Find existing debt for this person
+  let existing = debts.find(d => d.person === person);
+  if (existing) {
+    existing.entries.push({ amount, date, note, id: Date.now() });
+    existing.total = existing.entries.reduce((sum, e) => sum + e.amount, 0);
+  } else {
+    debts.push({
+      person,
+      entries: [{ amount, date, note, id: Date.now() }],
+      total: amount
+    });
+  }
+  
+  saveDebts();
+  renderDebts();
+  e.target.reset();
+  document.getElementById('debtDate').value = new Date().toISOString().split('T')[0];
+});
+
+function deleteDebtEntry(person, entryId) {
+  if (confirm('هل تريد حذف هذا السجل؟')) {
+    const debt = debts.find(d => d.person === person);
+    if (debt) {
+      debt.entries = debt.entries.filter(e => e.id !== entryId);
+      if (debt.entries.length === 0) {
+        debts = debts.filter(d => d.person !== person);
+      } else {
+        debt.total = debt.entries.reduce((sum, e) => sum + e.amount, 0);
+      }
+      saveDebts();
+      renderDebts();
+    }
+  }
+}
+
+function renderDebts() {
+  const list = document.getElementById('debtsList');
+  if (debts.length === 0) {
+    list.innerHTML = '<div class="empty-state"><p>لا توجد ديون مسجلة</p></div>';
+    return;
+  }
+  
+  list.innerHTML = debts.map(d => `
+    <div class="debt-card">
+      <div class="debt-header">
+        <div class="debt-person">👤 ${d.person}</div>
+        <div class="debt-amount">${d.total.toFixed(2)} ر.س</div>
+      </div>
+      <div class="debt-entries">
+        ${d.entries.map(e => `
+          <div class="debt-entry">
+            <div>
+              <div style="font-weight: 600;">${e.amount.toFixed(2)} ر.س</div>
+              <div class="date">${e.date}${e.note ? ' • ' + e.note : ''}</div>
+            </div>
+            <button class="delete-btn" onclick="deleteDebtEntry('${d.person}', ${e.id})">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg>
+            </button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============ Savings ============
+let savings = JSON.parse(localStorage.getItem('savings') || '[]');
+
+function saveSavings() {
+  localStorage.setItem('savings', JSON.stringify(savings));
+}
+
+document.getElementById('savingsForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const saving = {
+    id: Date.now(),
+    amount: parseFloat(document.getElementById('savingAmount').value),
+    date: new Date().toISOString().split('T')[0],
+    note: document.getElementById('savingNote').value
+  };
+  savings.unshift(saving);
+  saveSavings();
+  renderSavings();
+  e.target.reset();
+});
+
+function deleteSaving(id) {
+  if (confirm('هل تريد حذف هذا السجل؟')) {
+    savings = savings.filter(s => s.id !== id);
+    saveSavings();
+    renderSavings();
+  }
+}
+
+function renderSavings() {
+  const total = savings.reduce((sum, s) => sum + s.amount, 0);
+  document.getElementById('totalSavings').textContent = total.toFixed(2) + ' ر.س';
+  
+  const list = document.getElementById('savingsList');
+  if (savings.length === 0) {
+    list.innerHTML = '<div class="empty-state"><p>لا توجد مدخرات بعد</p></div>';
+    return;
+  }
+  
+  list.innerHTML = savings.map(s => `
+    <div class="transaction-item income">
+      <div style="display: flex; align-items: center; flex: 1;">
+        <button class="delete-btn" onclick="deleteSaving(${s.id})">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg>
+        </button>
+        <div class="transaction-info">
+          <h4>💰 إيداع ${s.note ? '- ' + s.note : ''}</h4>
+          <div class="meta"><span>📅 ${s.date}</span></div>
+        </div>
+      </div>
+      <div class="transaction-amount" style="color: var(--success);">+${s.amount.toFixed(2)} ر.س</div>
+    </div>
+  `).join('');
+}
+
+// ============ Initialize ============
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('debtDate').value = new Date().toISOString().split('T')[0];
+  
+  renderTransactions();
+  renderDebts();
+  renderSavings();
+  getPrayerTimes();
+});
+</script>
+
+</body>
+</html>
