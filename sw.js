@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hayati-v5';
+const CACHE_NAME = 'hayati-v6';
 const urlsToCache = [
   '/OneLife/',
   '/OneLife/index.html',
@@ -35,7 +35,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// استقبال رسالة لإظهار إشعار
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
     self.registration.showNotification(event.data.title, {
