@@ -1,0 +1,26 @@
+{
+  "name": "حياتي - تطبيقك الشخصي",
+  "short_name": "حياتي",
+  "description": "تطبيق إدارة المصاريف والديون والمدخرات",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#084d38",
+  "theme_color": "#084d38",
+  "orientation": "portrait",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
