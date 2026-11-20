@@ -138,8 +138,6 @@ body {
   color: white;
 }
 
-.nav-tab svg { width: 20px; height: 20px; }
-
 .main-content {
   max-width: 1200px;
   margin: 25px auto;
@@ -248,11 +246,6 @@ body {
 @keyframes slideUp {
   from { transform: translateY(100px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
-}
-
-.btn-install:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(201, 169, 97, 0.5);
 }
 
 .summary-grid {
@@ -384,6 +377,26 @@ body {
   border-right: 4px solid var(--gold);
 }
 
+.notification-banner {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--accent-dark);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 700;
+  display: none;
+  animation: slideDown 0.5s ease;
+  box-shadow: 0 4px 15px rgba(201, 169, 97, 0.4);
+}
+
+.notification-banner.show { display: block; }
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
 @media (max-width: 768px) {
   .header h1 { font-size: 1.8rem; }
   .form-row { grid-template-columns: 1fr; }
@@ -448,6 +461,9 @@ body {
   <div class="section active" id="prayer">
     <div class="card">
       <h2 class="card-title">🕐 مواقيت الصلاة</h2>
+      <div class="notification-banner" id="prayerNotification">
+        🔔 حان الآن وقت الصلاة
+      </div>
       <div class="location-info" id="locationInfo">
         <span>📍 جاري تحديد موقعك...</span>
         <button class="btn btn-gold" onclick="getPrayerTimes()" style="width: auto; padding: 8px 15px;">تحديث</button>
@@ -614,14 +630,12 @@ window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
   installBtn.style.display = 'block';
-  console.log('✅ PWA install prompt available');
 });
 
 async function installApp() {
   if (deferredPrompt) {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    console.log(`User response: ${outcome}`);
     deferredPrompt = null;
     installBtn.style.display = 'none';
   } else {
@@ -630,9 +644,7 @@ async function installApp() {
 }
 
 window.addEventListener('appinstalled', () => {
-  console.log('✅ PWA installed successfully');
   installBtn.style.display = 'none';
-  alert('تم تثبيت التطبيق بنجاح! 🎉');
 });
 
 // ============ Navigation ============
@@ -644,6 +656,8 @@ function showSection(id, btn) {
 }
 
 // ============ Prayer Times ============
+let prayerTimesData = [];
+
 async function getPrayerTimes() {
   const container = document.getElementById('prayerTimesContainer');
   const locationInfo = document.getElementById('locationInfo');
@@ -665,7 +679,7 @@ async function getPrayerTimes() {
       const data = await res.json();
       const timings = data.data.timings;
       
-      const prayers = [
+      prayerTimesData = [
         { name: 'الفجر', time: timings.Fajr, icon: '🌅' },
         { name: 'الشروق', time: timings.Sunrise, icon: '☀️' },
         { name: 'الظهر', time: timings.Dhuhr, icon: '🌞' },
@@ -677,13 +691,13 @@ async function getPrayerTimes() {
       const now = new Date();
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
       let nextIdx = -1;
-      for (let i = 0; i < prayers.length; i++) {
-        const [h, m] = prayers[i].time.split(':').map(Number);
+      for (let i = 0; i < prayerTimesData.length; i++) {
+        const [h, m] = prayerTimesData[i].time.split(':').map(Number);
         if (h * 60 + m > currentMinutes) { nextIdx = i; break; }
       }
       
       let html = '<div class="prayer-grid">';
-      prayers.forEach((p, i) => {
+      prayerTimesData.forEach((p, i) => {
         html += `<div class="prayer-card ${i === nextIdx ? 'next' : ''}">
           <div class="prayer-icon">${p.icon}</div>
           <div class="prayer-name">${p.name}</div>
@@ -698,6 +712,137 @@ async function getPrayerTimes() {
   }, () => {
     container.innerHTML = '<p style="text-align:center; color: var(--danger);">يرجى السماح بالوصول للموقع</p>';
   });
+}
+
+// ============ Prayer Notification System ============
+let lastNotifiedPrayer = '';
+
+// طلب إذن الإشعارات
+async function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    await Notification.requestPermission();
+  }
+}
+
+// تشغيل صوت نوتيفيكيشن بسيط (beep)
+function playNotificationSound() {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // beep أول
+    const osc1 = audioContext.createOscillator();
+    const gain1 = audioContext.createGain();
+    osc1.connect(gain1);
+    gain1.connect(audioContext.destination);
+    osc1.frequency.value = 880;
+    osc1.type = 'sine';
+    gain1.gain.value = 0.2;
+    osc1.start();
+    setTimeout(() => osc1.stop(), 200);
+    
+    // beep ثاني
+    setTimeout(() => {
+      const osc2 = audioContext.createOscillator();
+      const gain2 = audioContext.createGain();
+      osc2.connect(gain2);
+      gain2.connect(audioContext.destination);
+      osc2.frequency.value = 1100;
+      osc2.type = 'sine';
+      gain2.gain.value = 0.2;
+      osc2.start();
+      setTimeout(() => osc2.stop(), 200);
+    }, 250);
+    
+  } catch (e) {
+    console.log('خطأ في الصوت:', e);
+  }
+}
+
+// هزة خفيفة
+function vibrate() {
+  if ('vibrate' in navigator) {
+    navigator.vibrate([150, 80, 150]);
+  }
+}
+
+// إرسال الإشعار
+function sendPrayerNotification(prayerName, prayerTime) {
+  if (lastNotifiedPrayer === prayerName) return;
+  lastNotifiedPrayer = prayerName;
+  
+  // صوت
+  playNotificationSound();
+  
+  // هزة
+  vibrate();
+  
+  // إشعار من Service Worker
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({
+      type: 'PRAYER_NOTIFICATION',
+      prayerName: prayerName,
+      prayerTime: prayerTime
+    });
+  }
+  
+  // إشعار مباشر
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification('🕌 وقت الصلاة', {
+      body: `حان الآن وقت صلاة ${prayerName} (${prayerTime})`,
+      icon: 'icon.png',
+      vibrate: [150, 80, 150]
+    });
+  }
+  
+  // بانر داخل التطبيق
+  const banner = document.getElementById('prayerNotification');
+  banner.textContent = `🔔 حان الآن وقت صلاة ${prayerName} (${prayerTime})`;
+  banner.classList.add('show');
+  setTimeout(() => banner.classList.remove('show'), 10000);
+}
+
+// فحص وقت الصلاة
+function checkPrayerTime() {
+  if (prayerTimesData.length === 0) return;
+  
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const currentSeconds = now.getSeconds();
+  
+  prayerTimesData.forEach(p => {
+    const [h, m] = p.time.split(':').map(Number);
+    const prayerMinutes = h * 60 + m;
+    const diff = prayerMinutes - currentMinutes;
+    
+    // عند وقت الأذان بالضبط (أول 30 ثانية)
+    if (diff === 0 && currentSeconds < 30) {
+      sendPrayerNotification(p.name, p.time);
+    }
+    
+    // تنبيه خفيف قبل دقيقة (هزة وحدة بس)
+    if (diff === 1 && currentSeconds < 10 && lastNotifiedPrayer !== p.name + '_early') {
+      lastNotifiedPrayer = p.name + '_early';
+      if ('vibrate' in navigator) {
+        navigator.vibrate(100);
+      }
+    }
+  });
+  
+  // إعادة تعيين التنبيه المبكر بعد مرور الدقيقة
+  if (currentSeconds === 0) {
+    prayerTimesData.forEach(p => {
+      if (lastNotifiedPrayer === p.name + '_early') {
+        lastNotifiedPrayer = lastNotifiedPrayer.replace('_early', '');
+      }
+    });
+  }
+}
+
+// بدء نظام الإشعارات
+function startPrayerChecker() {
+  requestNotificationPermission();
+  setInterval(checkPrayerTime, 15000); // فحص كل 15 ثانية
+  console.log('✅ نظام إشعارات الصلاة مفعّل');
 }
 
 // ============ Transactions ============
@@ -890,10 +1035,8 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSavings();
   getPrayerTimes();
   
-  // Check if already installed
-  if (window.matchMedia('(display-mode: standalone)').matches) {
-    console.log('✅ App is running in standalone mode');
-  }
+  // بدء نظام إشعارات الصلاة بعد 3 ثواني
+  setTimeout(startPrayerChecker, 3000);
 });
 
 // ============ Service Worker ============
